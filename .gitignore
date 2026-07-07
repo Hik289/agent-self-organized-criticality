@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Environments
+.venv/
+venv/
+env/
+.env
+.env.*
+!.env.example
+
+# Experiment outputs
+results.json
+aggregates.json
+summary.json
+run.log
+*.log
+outputs/
+runs/
+wandb/
+
+# Data and benchmark caches
+data/
+datasets/
+cache/
+.cache/
+
+# Local/editor files
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Notebooks
+.ipynb_checkpoints/
+

@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+title: "World Model Science: Self-Organized Criticality, Weak Chaos, and Metastable Belief Dynamics in Long-Horizon LLM Agents"
+message: "If you use this codebase, please cite the paper."
+type: software
+authors:
+  - name: "Anonymous Authors"
+year: 2026
+license: MIT
+repository-code: "https://github.com/YOUR_ORG/YOUR_REPO"
+keywords:
+  - long-horizon agents
+  - self-organized criticality
+  - weak chaos
+  - world models
+  - agent evaluation
+

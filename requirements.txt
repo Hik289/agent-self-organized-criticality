@@ -1,0 +1,16 @@
+# Core
+openai>=1.0.0
+numpy>=1.24
+scipy>=1.10
+scikit-learn>=1.3
+
+# Benchmarks
+datasets>=2.14       # HotpotQA (auto-download)
+alfworld>=0.3.3      # ALFWorld embodied tasks
+
+# Analysis
+pandas>=2.0
+matplotlib>=3.7
+
+# Optional: spectral / fractal analysis
+# (all analysis code uses numpy/scipy, no extra deps needed)
