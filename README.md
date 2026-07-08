@@ -1,26 +1,28 @@
-# World Model Science: Self-Organized Criticality in Long-Horizon Agents
+<h1 align="center">World Model Science</h1>
 
 <p align="center">
-  <a href="#"><img alt="Paper" src="https://img.shields.io/badge/Paper-Under%20Review-red"></a>
-  <a href="#"><img alt="Code" src="https://img.shields.io/badge/Code-Available-blue"></a>
-  <a href="citation.bib"><img alt="BibTeX" src="https://img.shields.io/badge/BibTeX-Citation-9cf"></a>
-  <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/License-MIT-green"></a>
-  <a href="https://www.python.org/"><img alt="Python" src="https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white"></a>
+  <strong>Self-Organized Criticality in Long-Horizon Agents</strong>
 </p>
 
-Official code release for:
+<p align="center">
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.11%2B-blue.svg" alt="Python 3.11+"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="MIT License"></a>
+  <a href="#citation"><img src="https://img.shields.io/badge/paper-under%20review-lightgrey.svg" alt="Paper under review"></a>
+  <a href="citation.bib"><img src="https://img.shields.io/badge/citation-BibTeX-blue.svg" alt="BibTeX citation"></a>
+</p>
 
-> **World Model Science: Self-Organized Criticality, Weak Chaos, and Metastable Belief Dynamics in Long-Horizon LLM Agents**  
-> Conference paper under review.
+<p align="center">
+  <img src="assets/agent-soc-overview.webp" alt="Abstract visualization of self-organized criticality in long-horizon agents" width="95%">
+</p>
+
+Official code release for **World Model Science: Self-Organized Criticality, Weak Chaos, and Metastable Belief Dynamics in Long-Horizon LLM Agents**.
+
+Conference paper under review.
 
 This repository studies whether long-horizon agent failures behave like
 self-organized-criticality (SOC) phenomena: small local perturbations can
 accumulate into avalanches, collapse times, weak chaos, metastable belief
 dynamics, and scale-sensitive failure geometry.
-
-<p align="center">
-  <img src="assets/pipeline.png" alt="Agent SOC pipeline" width="95%">
-</p>
 
 ## Highlights
 
@@ -32,8 +34,8 @@ dynamics, and scale-sensitive failure geometry.
 ## Quickstart
 
 ```bash
-git clone https://github.com/YOUR_ORG/YOUR_REPO.git
-cd YOUR_REPO
+git clone git@github.com:Hik289/agent-self-organized-criticality.git
+cd agent-self-organized-criticality
 
 python -m venv .venv
 source .venv/bin/activate
@@ -90,8 +92,7 @@ committed.
 ├── citation.bib
 ├── requirements.txt
 ├── assets/
-│   ├── pipeline.png
-│   └── pipeline.svg
+│   └── agent-soc-overview.webp
 ├── lib/
 │   ├── wave2a/        # StatefulPuzzle-SOC + Game of Life utilities
 │   ├── wave2b/        # tau-bench utilities
@@ -161,7 +162,7 @@ If this repository is useful for your work, please cite:
   author       = {Anonymous Authors},
   year         = {2026},
   note         = {Conference paper under review},
-  howpublished = {\url{https://github.com/YOUR_ORG/YOUR_REPO}}
+  howpublished = {\url{https://github.com/Hik289/agent-self-organized-criticality}}
 }
 ```
 

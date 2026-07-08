@@ -6,11 +6,10 @@ authors:
   - name: "Anonymous Authors"
 year: 2026
 license: MIT
-repository-code: "https://github.com/YOUR_ORG/YOUR_REPO"
+repository-code: "https://github.com/Hik289/agent-self-organized-criticality"
 keywords:
   - long-horizon agents
   - self-organized criticality
   - weak chaos
   - world models
   - agent evaluation
-
