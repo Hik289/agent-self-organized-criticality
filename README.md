@@ -24,6 +24,12 @@ self-organized-criticality (SOC) phenomena: small local perturbations can
 accumulate into avalanches, collapse times, weak chaos, metastable belief
 dynamics, and scale-sensitive failure geometry.
 
+## Pipeline
+
+<p align="center">
+  <img src="assets/agent-soc-pipeline.webp" alt="Numbered Agent SOC pipeline" width="95%">
+</p>
+
 ## Highlights
 
 - **22 controlled experiments** spanning synthetic, tool-use, RAG, and embodied-agent settings.
@@ -92,7 +98,8 @@ committed.
 ├── citation.bib
 ├── requirements.txt
 ├── assets/
-│   └── agent-soc-overview.webp
+│   ├── agent-soc-overview.webp
+│   └── agent-soc-pipeline.webp
 ├── lib/
 │   ├── wave2a/        # StatefulPuzzle-SOC + Game of Life utilities
 │   ├── wave2b/        # tau-bench utilities
