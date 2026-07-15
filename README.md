@@ -5,10 +5,8 @@
 </p>
 
 <p align="center">
-  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.11%2B-blue.svg" alt="Python 3.11+"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="MIT License"></a>
-  <a href="#citation"><img src="https://img.shields.io/badge/paper-under%20review-lightgrey.svg" alt="Paper under review"></a>
-  <a href="citation.bib"><img src="https://img.shields.io/badge/citation-BibTeX-blue.svg" alt="BibTeX citation"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="MIT license"></a>
+  <a href="pyproject.toml"><img src="https://img.shields.io/badge/Python-3.11%2B-3776AB.svg" alt="Python 3.11+"></a>
 </p>
 
 <p align="center">
