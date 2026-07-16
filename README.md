@@ -22,20 +22,26 @@ self-organized-criticality (SOC) phenomena: small local perturbations can
 accumulate into avalanches, collapse times, weak chaos, metastable belief
 dynamics, and scale-sensitive failure geometry.
 
+## At a Glance
+
+- **Research question.** Do long-horizon agent failures exhibit self-organized criticality rather than independent error accumulation?
+- **Core idea.** The pipeline measures avalanche-like failure statistics across synthetic tasks and external agent benchmarks.
+- **What is included.** Controlled SOC experiments, benchmark wrappers, LLM configuration, reproduction scripts, and reported key results.
+
 ## Pipeline
 
 <p align="center">
   <img src="assets/agent-soc-pipeline.webp" alt="Numbered Agent SOC pipeline" width="95%">
 </p>
 
-## Highlights
+## Key Contributions
 
 - **22 controlled experiments** spanning synthetic, tool-use, RAG, and embodied-agent settings.
 - **6 benchmark families**: StatefulPuzzle-SOC, Game of Life prediction, tau-bench Retail/Airline, ALFWorld, GAIA, and HotpotQA-RAG.
 - **SOC-style measurements**: avalanche size, collapse time, stress response, spectral slope, fractal dimension, local-global gap, weak-chaos sensitivity, and finite-size scaling.
 - **Provider-neutral LLM interface**: public configuration uses generic endpoint/model/key variables and does not require a provider-specific API name in the docs.
 
-## Quickstart
+## Quick Start
 
 ```bash
 git clone git@github.com:Hik289/agent-self-organized-criticality.git
