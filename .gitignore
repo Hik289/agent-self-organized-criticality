@@ -41,3 +41,12 @@ cache/
 # Notebooks
 .ipynb_checkpoints/
 
+# Shared research-artifact hygiene
+.AppleDouble
+._*
+*~
+build/
+dist/
+logs/
+checkpoints/
+*.tmp
