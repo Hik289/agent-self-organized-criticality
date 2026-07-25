@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import os
 import time
-from typing import Any
 
 from openai import OpenAI
 

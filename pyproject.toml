@@ -28,10 +28,9 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/YOUR_ORG/YOUR_REPO"
-Repository = "https://github.com/YOUR_ORG/YOUR_REPO"
+Homepage = "https://github.com/Hik289/agent-self-organized-criticality"
+Repository = "https://github.com/Hik289/agent-self-organized-criticality"
 
 [tool.setuptools.packages.find]
 where = ["lib"]
 include = ["wave2a*", "wave2b*", "wave2c*"]
-

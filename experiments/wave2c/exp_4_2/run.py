@@ -1,6 +1,6 @@
 """Exp 4.2 (Part IV): HotpotQA surface variants macro stability.
 
-Uses supporting-facts subset only (§Blocker 2 from Director).
+Uses the supporting-facts subset defined by the experiment protocol.
 5 surface variants x 30 questions (using 40 available) = 150 runs.
 
 Success: macro dist (EM/F1 distribution) < local variance (per-question EM

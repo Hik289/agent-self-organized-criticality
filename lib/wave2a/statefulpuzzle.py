@@ -1,6 +1,6 @@
 """StatefulPuzzle-SOC integration for wave2a — step-by-step (turn-by-turn) policy.
 
-Design (locked per Director spec §Part V/VI/VII/II):
+Protocol used by the controlled experiments in Parts II, V, VI, and VII:
   * One LLM call per step.
   * At step t, prompt = (system + task_frame + short_history_summary + current_obs).
   * LLM outputs JSON {belief: int} — one integer prediction of gold[t].
@@ -19,9 +19,8 @@ from __future__ import annotations
 import json
 import re
 import sys
-import time
 from pathlib import Path
-from typing import Any, Callable
+from typing import Callable
 
 import numpy as np
 
@@ -33,7 +32,7 @@ from env import StatefulPuzzleConfig, StatefulPuzzleSOC  # type: ignore
 
 
 # ---------------------------------------------------------------------------
-# LLM step policy (default surface prompt for §3.1)
+# LLM step policy (default surface prompt from Section 3.1)
 # ---------------------------------------------------------------------------
 
 DEFAULT_SYSTEM = (

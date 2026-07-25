@@ -10,9 +10,8 @@ import json
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
-import numpy as np
 
 from .azure_client import build_client, chat
 from .pipeline import analyze_trajectory

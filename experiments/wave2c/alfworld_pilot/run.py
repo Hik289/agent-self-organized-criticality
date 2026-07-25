@@ -1,4 +1,4 @@
-"""ALFWorld saturation pilot (Director spec §Blocker 1).
+"""ALFWorld saturation pilot for selecting nonsaturated task types.
 
 Pilot 100 tasks across 6 canonical types (~16-17 per type).
 Baseline: default agent prompt, max_steps=30, seed=42, temp=0.0, concurrency=2.
@@ -6,7 +6,7 @@ Baseline: default agent prompt, max_steps=30, seed=42, temp=0.0, concurrency=2.
 Decision rules:
   - For each of 6 types, keep if baseline success rate < 80%.
   - Drop types with success >= 80% (LLM too familiar).
-  - If ALL types >= 80% → escalate to Director.
+  - If all types reach 80%, report that the benchmark is saturated.
 
 Output:
   aggregates.json:
@@ -25,14 +25,14 @@ import numpy as np
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
 from lib.azure_client import build_client
-from lib.alfworld_runner import run_alfworld_game, list_games_by_type, TASK_TYPE_LABELS
+from lib.alfworld_runner import run_alfworld_game, list_games_by_type
 
 CONFIG_PATH = "./experiments/wave1/envs/alfworld/base_config.yaml"
 CONCURRENCY = 1  # alfworld env init isn't thread-safe with concurrent env.game_files mutation
 SATURATION_THRESHOLD = 0.80
 
-# 6 canonical §spec types (Pick, Put, Clean, Heat, Cool, Look).
-# ALFWorld actually has 7 sub-types; map spec labels to actual sub-types:
+# Six task groups used in the study (Pick, Put, Clean, Heat, Cool, Look).
+# ALFWorld has seven subtypes; this pilot maps the study labels to six of them.
 CANONICAL = {
     "Pick_Put": "pick_and_place_simple",
     "Look": "look_at_obj_in_light",

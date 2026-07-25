@@ -69,7 +69,6 @@ def build_agent_prompts(n_max: int = 30):
 
 def _run_one_policy(policy: str, n_max: int, sub_dir: Path):
     from tau_bench.envs.retail.tasks_test import TASKS_TEST
-    from lib.tb_runner import run_experiment
     tasks = []
     prompts = {}
     for i in range(min(n_max, len(TASKS_TEST))):

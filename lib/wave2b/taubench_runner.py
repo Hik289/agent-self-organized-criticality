@@ -39,7 +39,7 @@ class LLMUserSimulator:
             "- Do not hallucinate information that is not provided in the instruction. For "
             "example, if the agent asks for the order id but it is not mentioned in the "
             "instruction, do not make up an order id, just say you do not remember or have it.\n"
-            "- If the instruction goal is satisified, generate '###STOP###' as a standalone "
+            "- If the instruction goal is satisfied, generate '###STOP###' as a standalone "
             "message without anything else to end the conversation.\n"
             "- Do not repeat the exact instruction in the conversation. Instead, use your own "
             "words to convey the same information.\n"

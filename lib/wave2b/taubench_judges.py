@@ -14,7 +14,6 @@ Global judge: uses full trajectory + gold_actions + task reward.
   Collapse indicator C_i = 1 if G_i < 0.5 OR min_t F_{i,t} < 0.5 at end.
 """
 from __future__ import annotations
-from typing import Any
 
 # Domain tool sets (loaded from taubench_extractor imports)
 RETAIL_TOOLS = frozenset({

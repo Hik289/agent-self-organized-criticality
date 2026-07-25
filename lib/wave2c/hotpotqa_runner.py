@@ -5,7 +5,6 @@ import re
 import string
 import time
 from collections import Counter
-from pathlib import Path
 
 from rank_bm25 import BM25Okapi
 from .azure_client import build_client, AZURE_DEPLOYMENT, price

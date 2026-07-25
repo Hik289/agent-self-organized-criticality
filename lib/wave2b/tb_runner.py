@@ -8,7 +8,6 @@ import json
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
-from typing import Any, Callable
 
 from .azure_client import build_client
 from .taubench_runner import solve_task

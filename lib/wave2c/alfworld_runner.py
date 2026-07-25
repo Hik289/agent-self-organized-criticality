@@ -8,7 +8,6 @@ from __future__ import annotations
 import os
 import re
 import time
-from typing import Any
 
 from .azure_client import build_client, AZURE_DEPLOYMENT, price
 
