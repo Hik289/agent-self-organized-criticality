@@ -22,11 +22,15 @@ self-organized-criticality (SOC) phenomena: small local perturbations can
 accumulate into avalanches, collapse times, weak chaos, metastable belief
 dynamics, and scale-sensitive failure geometry.
 
-## Repository Summary
+## At A Glance
 
-- **Scope.** Do long-horizon agent failures exhibit self-organized criticality rather than independent error accumulation?
-- **Method.** The pipeline measures avalanche-like failure statistics across synthetic tasks and external agent benchmarks.
-- **Contents.** Controlled SOC experiments, benchmark wrappers, LLM configuration, reproduction scripts, and reported key results.
+| Artifact review question | Entry point |
+| --- | --- |
+| Research question | Do long-horizon agent failures exhibit self-organized criticality rather than independent error accumulation? |
+| Core method | The pipeline measures avalanche-like failure statistics across synthetic tasks and external agent benchmarks. |
+| Included artifacts | Controlled SOC experiments, benchmark wrappers, LLM configuration, reproduction scripts, and reported key results. |
+| Fast validation | `cd experiments/wave2a/exp_1_1 && python run.py --n 2` |
+| Paper-scale reproduction | Wave-level loops over `experiments/wave2a`, `wave2b`, and `wave2c`. |
 
 ## Pipeline
 
