@@ -73,11 +73,6 @@ def _run_one_policy(policy: str, n_max: int, sub_dir: Path):
     prompts = {}
     for i in range(min(n_max, len(TASKS_TEST))):
         tasks.append((i, {"task_index": i, "verify_policy": policy}))
-        # We need env.wiki + directive as prompt. But we can only override after we
-        # know env's wiki. Solution: pass a special sentinel and let solve_task look up.
-        # Simpler: the directive is appended INSIDE solve_task via
-        # `agent_system_prompt = env.wiki + VERIFY_DIRECTIVE`. To do that we need to
-        # amend taubench_runner. Below we set the prompt to a special marker.
         prompts[i] = f"__APPEND_TO_WIKI__::{policy}"
     return run_experiment(
         exp_id=f"exp_2_2::{policy}",
