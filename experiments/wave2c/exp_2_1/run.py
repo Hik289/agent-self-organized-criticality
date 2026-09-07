@@ -62,16 +62,8 @@ def build_task_list(per_cell: int, subset_types: list = None):
         games = games_by.get(tt, [])[:per_cell]
         for vis, prompt in VISIBILITY_PROMPTS.items():
             for g in games:
-                # We must run each game separately per vis condition; the
-                # "same" game file gets 3 runs. Since env init is fresh each
-                # time this is OK.
-                # Use game_file + "@vis" as a unique key stored in cell_meta.
                 tasks.append((g, {"task_type": tt, "visibility": vis,
                                     "game_file": g}))
-                # For prompts_by_task we need unique key per (game, vis).
-                # But the runner uses game_file as key. Workaround: pass
-                # per-task prompt via cell_meta and modify batch_runner to
-                # use it — see below.
                 prompts_by_game[(g, vis)] = prompt
     return tasks, prompts_by_game
 
