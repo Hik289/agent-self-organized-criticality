@@ -5,10 +5,8 @@ type: software
 authors:
   - family-names: "Song"
     given-names: "Xinyuan"
-    affiliation: "Emory University"
   - family-names: "Cai"
     given-names: "Zekun"
-    affiliation: "The University of Tokyo; LocationMind"
 license: MIT
 repository-code: "https://github.com/Hik289/agent-self-organized-criticality"
 preferred-citation:
@@ -17,10 +15,8 @@ preferred-citation:
   authors:
     - family-names: "Song"
       given-names: "Xinyuan"
-      affiliation: "Emory University"
     - family-names: "Cai"
       given-names: "Zekun"
-      affiliation: "The University of Tokyo; LocationMind"
   year: 2026
   journal: "arXiv"
   doi: "10.48550/arXiv.2609.17419"
