@@ -5,6 +5,14 @@
 </p>
 
 <p align="center">
+  <strong>Xinyuan Song</strong><sup>1</sup> &nbsp; <strong>Zekun Cai</strong><sup>2,3</sup><br>
+  <sup>1</sup>Emory University, Atlanta, GA, USA<br>
+  <sup>2</sup>The University of Tokyo, Tokyo, Japan &nbsp; <sup>3</sup>LocationMind, Tokyo, Japan
+</p>
+
+<p align="center">
+  <a href="https://arxiv.org/abs/2609.17419"><img src="https://img.shields.io/badge/arXiv-2609.17419-b31b1b.svg" alt="arXiv:2609.17419"></a>
+  <a href="https://arxiv.org/pdf/2609.17419"><img src="https://img.shields.io/badge/Paper-PDF-red.svg" alt="Paper PDF"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="MIT license"></a>
   <a href="pyproject.toml"><img src="https://img.shields.io/badge/Python-3.11%2B-3776AB.svg" alt="Python 3.11+"></a>
 </p>
@@ -15,7 +23,7 @@
 
 Official code release for **World Model Science: Self-Organized Criticality, Weak Chaos, and Metastable Belief Dynamics in Long-Horizon LLM Agents**.
 
-Conference paper under review.
+Paper: [arXiv:2609.17419](https://arxiv.org/abs/2609.17419) (2026). Under review.
 
 This repository studies whether long-horizon agent failures behave like
 self-organized-criticality (SOC) phenomena: small local perturbations can
@@ -184,11 +192,14 @@ If this repository is useful for your work, please cite:
 
 ```bibtex
 @misc{worldmodelsoc2026,
-  title        = {World Model Science: Self-Organized Criticality, Weak Chaos, and Metastable Belief Dynamics in Long-Horizon LLM Agents},
-  author       = {Anonymous Authors},
-  year         = {2026},
-  note         = {Conference paper under review},
-  howpublished = {\url{https://github.com/Hik289/agent-self-organized-criticality}}
+  title         = {World Model Science: Self-Organized Criticality, Weak Chaos, and Metastable Belief Dynamics in Long-Horizon {LLM} Agents},
+  author        = {Song, Xinyuan and Cai, Zekun},
+  year          = {2026},
+  eprint        = {2609.17419},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.AI},
+  doi           = {10.48550/arXiv.2609.17419},
+  url           = {https://arxiv.org/abs/2609.17419}
 }
 ```
 

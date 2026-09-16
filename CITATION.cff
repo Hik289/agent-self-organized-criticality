@@ -1,12 +1,31 @@
 cff-version: 1.2.0
 title: "World Model Science: Self-Organized Criticality, Weak Chaos, and Metastable Belief Dynamics in Long-Horizon LLM Agents"
-message: "If you use this codebase, please cite the paper."
+message: "If you use this codebase, please cite the paper listed in preferred-citation."
 type: software
 authors:
-  - name: "Anonymous Authors"
-year: 2026
+  - family-names: "Song"
+    given-names: "Xinyuan"
+    affiliation: "Emory University"
+  - family-names: "Cai"
+    given-names: "Zekun"
+    affiliation: "The University of Tokyo; LocationMind"
 license: MIT
 repository-code: "https://github.com/Hik289/agent-self-organized-criticality"
+preferred-citation:
+  type: article
+  title: "World Model Science: Self-Organized Criticality, Weak Chaos, and Metastable Belief Dynamics in Long-Horizon LLM Agents"
+  authors:
+    - family-names: "Song"
+      given-names: "Xinyuan"
+      affiliation: "Emory University"
+    - family-names: "Cai"
+      given-names: "Zekun"
+      affiliation: "The University of Tokyo; LocationMind"
+  year: 2026
+  journal: "arXiv"
+  doi: "10.48550/arXiv.2609.17419"
+  url: "https://arxiv.org/abs/2609.17419"
+  notes: "arXiv:2609.17419 [cs.AI]"
 keywords:
   - long-horizon agents
   - self-organized criticality

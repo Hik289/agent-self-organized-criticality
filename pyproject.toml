@@ -9,7 +9,10 @@ description = "Experiment code for self-organized criticality in long-horizon ag
 readme = "README.md"
 requires-python = ">=3.11"
 license = {text = "MIT"}
-authors = [{name = "Anonymous Authors"}]
+authors = [
+  {name = "Xinyuan Song"},
+  {name = "Zekun Cai"},
+]
 keywords = [
   "long-horizon agents",
   "self-organized criticality",
@@ -28,6 +31,7 @@ dependencies = [
 ]
 
 [project.urls]
+Paper = "https://arxiv.org/abs/2609.17419"
 Homepage = "https://github.com/Hik289/agent-self-organized-criticality"
 Repository = "https://github.com/Hik289/agent-self-organized-criticality"
 
