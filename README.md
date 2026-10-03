@@ -37,12 +37,6 @@ dynamics, and scale-sensitive failure geometry.
 | Fast validation | `cd experiments/wave2a/exp_1_1 && python run.py --n 2` |
 | Paper-scale reproduction | Wave-level loops over `experiments/wave2a`, `wave2b`, and `wave2c`. |
 
-## Pipeline
-
-<p align="center">
-  <img src="assets/agent-soc-pipeline.webp" alt="Numbered Agent SOC pipeline" width="95%">
-</p>
-
 ## Key Contributions
 
 - **22 controlled experiments** spanning synthetic, tool-use, RAG, and embodied-agent settings.
@@ -111,8 +105,7 @@ committed.
 ├── citation.bib
 ├── requirements.txt
 ├── assets/
-│   ├── agent-soc-overview.png
-│   └── agent-soc-pipeline.webp
+│   └── agent-soc-overview.png
 ├── lib/
 │   ├── wave2a/
 │   ├── wave2b/

@@ -31,7 +31,6 @@ No single reproduction runner is tracked. Use the README commands and keep first
 ## Figure Assets
 
 - `assets/agent-soc-overview.png`
-- `assets/agent-soc-pipeline.webp`
 
 ## Data And Outputs
 
