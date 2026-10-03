@@ -1,14 +1,3 @@
-"""Exp 8.1 (Part VIII): evidence graph fractal D_f — HotpotQA.
-
-5 distractor structures x 30 questions = 150 runs.
-
-For each question:
-- Retrieve top-5 from all paragraphs
-- Compute error mask over the paragraph set (which retrieved paragraphs
-  are NOT supporting facts?)
-- Build evidence graph adjacency (paragraphs share entities → edge)
-- Box-counting D_f on error nodes' position on the graph
-"""
 from __future__ import annotations
 import json
 import sys
@@ -22,7 +11,7 @@ from lib.hotpotqa_runner import load_corpus, run_one_question, tokenize
 _W2A_LIB = Path(__file__).resolve().parents[2] / "wave2a" / "lib"
 if str(_W2A_LIB) not in sys.path:
     sys.path.insert(0, str(_W2A_LIB))
-from metrics import box_counting_2d  # type: ignore
+from metrics import box_counting_2d
 
 
 DISTRACTOR_STRUCTURES = [
@@ -32,28 +21,22 @@ DISTRACTOR_STRUCTURES = [
 
 
 def _paragraph_similarity_graph(paragraphs: list[dict]) -> np.ndarray:
-    """Build paragraph adjacency matrix by shared-token count > threshold."""
     n = len(paragraphs)
     token_sets = [set(tokenize(p["title"] + " " + " ".join(p["sentences"]))) for p in paragraphs]
     A = np.zeros((n, n), dtype=int)
     for i in range(n):
         for j in range(i + 1, n):
             shared = len(token_sets[i] & token_sets[j])
-            if shared >= 8:  # threshold heuristic
+            if shared >= 8:
                 A[i, j] = A[j, i] = 1
     return A
 
 
 def _fractal_over_error_positions(paragraphs: list[dict], error_indices: list[int]) -> dict:
-    """Box-count the positions of error indices on a 2D layout of paragraphs.
-
-    We embed paragraphs on a 2D grid (10 paragraphs → 4x4 pad grid), mark error
-    positions, and box-count.
-    """
     n = len(paragraphs)
     if n == 0 or not error_indices:
         return {"D_f": None, "n_scales": 0}
-    # simple grid layout: n=10 → 4×3 grid, n=8 → 4×2, etc.
+
     ncols = max(3, int(np.ceil(np.sqrt(n))))
     L = max(4, ncols)
     mask = np.zeros((L, L), dtype=bool)
@@ -67,13 +50,12 @@ def _fractal_over_error_positions(paragraphs: list[dict], error_indices: list[in
 
 
 def run_one_with_graph(item, client, distractor_kind: str):
-    """Run question, compute error mask, box-counting D_f."""
     row = run_one_question(item, client=client, k=5, paragraph_filter="all",
                             distractor_kind=distractor_kind)
     supp_titles = {t for (t, _s) in [tuple(x) for x in item["supporting_facts"]]}
     all_paragraphs = item["paragraphs"]
     retrieved_titles = row.get("retrieved_titles", [])
-    # error mask: positions of retrieved paragraphs that are NOT supporting facts
+
     error_indices = []
     for i, p in enumerate(all_paragraphs):
         if p["title"] in retrieved_titles and p["title"] not in supp_titles:

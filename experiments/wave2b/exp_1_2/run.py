@@ -1,10 +1,3 @@
-"""Exp 1.2 (Part I): small/large failures on same avalanche curve.
-
-Retail full test split (~114 tasks), single seed=42, temp=0.0.
-
-Success (Part I qualitative): minor recoverable errors and final collapse trajs
-should fall on same A_i distribution curve.
-"""
 from __future__ import annotations
 import json
 import sys

@@ -1,4 +1,3 @@
-"""ALFWorld state extractor (§3.1) — 7-tuple z_{i,t} per step."""
 from __future__ import annotations
 import re
 from dataclasses import dataclass, field, asdict

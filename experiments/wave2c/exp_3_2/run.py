@@ -1,13 +1,3 @@
-"""Exp 3.2 (Part III): local valid, globally harmful — GAIA.
-
-30 Level-1 tasks (no attachment), single seed=42, temp=0.0.
-Post-hoc classify each step by step_type (initial_search, source_selection,
-evidence_extraction, calculation, intermediate_conclusion, final_answer).
-Success: Δ^LG > 0 in evidence_extraction step type.
-
-Note: In single-model GAIA, step_type is determined by which tool the LLM
-called, not by an external classifier.
-"""
 from __future__ import annotations
 import json
 import sys
@@ -22,9 +12,6 @@ from lib.gaia_runner import load_gaia_level1, run_one_task
 
 
 def _local_judge_step(step: dict) -> int:
-    """L=1 if action was a valid tool call with parseable kwargs. GAIA agent
-    always has admissible = TOOLS_SCHEMA so L=1 by default (Part III thesis
-    predicts L stays high but F drops)."""
     action = step.get("action_name") or ""
     if not action:
         return 0
@@ -32,7 +19,7 @@ def _local_judge_step(step: dict) -> int:
         return 1
     kwargs = step.get("action_kwargs") or {}
     if action in ("web_search", "browse", "read_file"):
-        # need at least one arg
+
         if not kwargs:
             return 0
     if action == "calc" and not kwargs.get("expression"):
@@ -43,14 +30,13 @@ def _local_judge_step(step: dict) -> int:
 
 
 def _global_F_at_step(step_i: int, total_steps: int, correct: int) -> float:
-    """F approx: 0 until final; then 1 iff correct."""
     if step_i < total_steps - 1:
-        return 0.5  # in-progress baseline
+        return 0.5
     return float(correct)
 
 
 def analyze(rows):
-    # per-step-type aggregation across all rows
+
     by_step_type = {}
     for r in rows:
         n_steps = r["n_steps"]

@@ -1,8 +1,3 @@
-"""Exp 5.1 (Part V): stress accumulation before collapse — Retail.
-
-**SECONDARY ANALYSIS**: reuses exp_1_2 trajectories (same 115 retail tasks).
-No new API calls.
-"""
 from __future__ import annotations
 import json
 import sys
@@ -14,7 +9,7 @@ sys.path.insert(0, str(HERE.parent))
 _W2A_LIB = Path(__file__).resolve().parents[2] / "wave2a" / "lib"
 if str(_W2A_LIB) not in sys.path:
     sys.path.insert(0, str(_W2A_LIB))
-from metrics import auroc  # type: ignore
+from metrics import auroc
 
 
 CONF_KWD = ("cancel", "refund", "downgrade", "conflict")

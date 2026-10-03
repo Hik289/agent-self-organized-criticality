@@ -1,18 +1,3 @@
-"""Exp 11.2 (Part XI): intervention regime shift — Retail.
-
-6 regime setups (agent system prompt append):
-  high_verify_low_explore
-  medium_verify_medium_explore
-  low_verify_high_explore
-  memory_heavy_unchecked
-  plan_reset_enabled
-  no_intervention (control)
-
-n=30 tasks per regime = 180 tasks.
-
-Judgment: medium (near-critical) should yield highest reward; extremes
-(rigid or unstable) lower.
-"""
 from __future__ import annotations
 import json
 import sys

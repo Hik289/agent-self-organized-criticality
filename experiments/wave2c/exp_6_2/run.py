@@ -1,15 +1,3 @@
-"""Exp 6.2 (Part VI): memory setting alters spectral slope alpha — HotpotQA.
-
-5 memory settings x 30 questions = 150 runs.
-- no_retrieval: use only supporting_only subset with k=0 (LLM must answer from parametric memory)
-- top_2: k=2 (narrow field, likely misses supporting)
-- top_5: k=5 (default)
-- full_context: all 10 paragraphs
-- contaminated: k=5, but supporting paragraphs corrupted with rho=0.5
-
-For each setting, compute per-question error e_i = 1 - f1, then spectral
-slope alpha of the e-series over question index (30 questions as time axis).
-"""
 from __future__ import annotations
 import json
 import sys
@@ -23,7 +11,7 @@ from lib.hotpotqa_runner import load_corpus, run_one_question
 _W2A_LIB = Path(__file__).resolve().parents[2] / "wave2a" / "lib"
 if str(_W2A_LIB) not in sys.path:
     sys.path.insert(0, str(_W2A_LIB))
-from metrics import spectral_slope, dfa_exponent  # type: ignore
+from metrics import spectral_slope, dfa_exponent
 
 
 MEMORY_SETTINGS = {

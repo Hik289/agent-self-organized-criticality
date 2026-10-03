@@ -1,8 +1,3 @@
-"""Runner scaffolding for tau-bench experiments (wave 2b).
-
-Runs a list of (task_index, extra_meta) with concurrency, calls solve_task,
-runs analyze_trajectory, aggregates. Saves results.json + summary.json.
-"""
 from __future__ import annotations
 import json
 import time
@@ -14,13 +9,12 @@ from .taubench_runner import solve_task
 from .pipeline import analyze_trajectory
 
 
-CONCURRENCY = 2  # tau-bench prompts are large; conservative concurrency
+CONCURRENCY = 2
 
 
 def _run_one(*, domain: str, task_index: int, cell_meta: dict,
              client, agent_system_prompt: str | None = None,
              max_num_steps: int = 30, seed: int = 42) -> dict:
-    """Run one task, return {row, raw_trajectory}."""
     try:
         traj = solve_task(
             domain=domain,
@@ -65,7 +59,7 @@ def _run_one(*, domain: str, task_index: int, cell_meta: dict,
         "n_matched": ana["n_matched"],
         "cell": cell_meta,
     }
-    # Compact raw trajectory (drop long messages, keep step_events)
+
     compact = {
         "task_id": traj["task_id"],
         "domain": traj["domain"],
@@ -87,12 +81,6 @@ def run_experiment(*, exp_id: str, tasks: list,
                    agent_system_prompt_by_task: dict | None = None,
                    concurrency: int = CONCURRENCY,
                    save_raw: bool = True) -> dict:
-    """Run a list of (task_index, cell_meta) tuples.
-
-    Args:
-        tasks: list of (task_index, cell_meta_dict)
-        agent_system_prompt_by_task: optional {task_index -> system prompt string}
-    """
     out_dir.mkdir(parents=True, exist_ok=True)
     client = build_client()
     agent_system_prompt_by_task = agent_system_prompt_by_task or {}

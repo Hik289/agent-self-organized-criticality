@@ -1,9 +1,3 @@
-"""Exp 10.2 (§Part X): Game of Life grid-size finite-size scaling (STEP-BY-STEP).
-
-L ∈ {16, 24, 32, 48, 64}. p_obs=0.75, density=0.25, K_MAX=64.
-Independent LLM call per K. Checkpoints K ∈ {1, 2, 4, 8, 16, 32, 64}.
-n=30 traj/L × 5 = 150 traj × 7 K = 1050 calls.
-"""
 from __future__ import annotations
 
 import json
@@ -15,17 +9,17 @@ from pathlib import Path
 import numpy as np
 
 
-CONCURRENCY_PER_L = 2  # Researcher respec: lower to avoid memory accumulation at L=256
+CONCURRENCY_PER_L = 2
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
-from lib.azure_client import build_client, chat  # noqa: E402
-from lib.gameoflife import (make_grid, rollout, mask_observation,  # noqa: E402
+from lib.azure_client import build_client, chat
+from lib.gameoflife import (make_grid, rollout, mask_observation,
                              llm_predict_grid_at_K, per_grid_metrics)
-from lib.metrics import box_counting_2d  # noqa: E402
+from lib.metrics import box_counting_2d
 
 
-L_LEVELS = [16, 32, 64, 128, 256]  # updated per spec review
+L_LEVELS = [16, 32, 64, 128, 256]
 K_MAX = 64
 CHECKPOINTS = [1, 2, 4, 8, 16, 32, 64]
 DENSITY = 0.25
@@ -109,7 +103,7 @@ def main() -> int:
             if r is not None:
                 all_rows.append(r)
         log.write(f"L_DONE L={L} cost=${total_cost:.4f}\n"); log.flush()
-        # incremental save after each cell (rescue against silent stalls)
+
         try:
             _tmp_partial = [dict(r) for r in all_rows]
             for r in _tmp_partial:

@@ -1,9 +1,3 @@
-"""Batched ALFWorld runner: iterate tasks, extract, judge, aggregate.
-
-Because ALFWorld env init is not thread-safe (mutates shared env.game_files),
-we run tasks SERIALLY per experiment. Concurrency across experiments is
-achieved by launching them as separate processes.
-"""
 from __future__ import annotations
 import json
 import time
@@ -72,7 +66,6 @@ def run_experiment(*, exp_id: str, tasks: list,
                    max_steps: int = 30,
                    system_prompt_by_task=None,
                    save_raw: bool = True) -> dict:
-    """Run tasks serially (alfworld env not thread-safe)."""
     out_dir.mkdir(parents=True, exist_ok=True)
     client = build_client()
     system_prompt_by_task = system_prompt_by_task or {}

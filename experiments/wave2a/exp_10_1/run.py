@@ -1,6 +1,3 @@
-"""Exp 10.1 (§Part X): horizon FSS H ∈ {8,16,32,64,128} (STEP-BY-STEP).
-D=1, ρ=0.20. n=30/H → 150 traj.
-"""
 from __future__ import annotations
 import json, sys
 from pathlib import Path
@@ -19,7 +16,7 @@ RHO, D = 0.20, 1
 
 def build_cells():
     cells, rho_by = [], {}
-    for H in [8, 16, 32, 64, 128, 256, 512]:  # updated per spec review
+    for H in [8, 16, 32, 64, 128, 256, 512]:
         cid = f"H_{H}"
         cfg = StatefulPuzzleConfig(H=H, S=20, D=D, V=8, seed=42, perturbation=None)
         cells.append((cid, cfg, {"H": H, "rho": RHO})); rho_by[cid] = RHO
@@ -51,7 +48,7 @@ def main():
     cells, rho_by = build_cells()
     summary = run_experiment(exp_id="exp_10_1", cells=cells, n_traj_per_cell=args.n,
         out_dir=HERE, seed=42, use_llm=True, rho_by_cell=rho_by,
-        concurrency=2)  # respec: lower to avoid memory accumulation at H=512
+        concurrency=2)
     data = json.loads((HERE/"results.json").read_text())
     agg = analyze(data["rows"])
     (HERE/"aggregates.json").write_text(json.dumps(agg, indent=2))

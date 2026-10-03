@@ -1,8 +1,3 @@
-"""Tau-bench trajectory runner adapted from anchor_setup/harness/tau_bench_retail/run_sanity.py.
-
-Runs a single task, returns full trajectory dict with step_events for extractor.
-Thread-safe: fresh env instance per call.
-"""
 from __future__ import annotations
 import json
 import time
@@ -95,21 +90,11 @@ def solve_task(*, domain: str, task_index: int,
                agent_system_prompt: str | None = None,
                max_num_steps: int = 30,
                seed: int = 42) -> dict:
-    """Run a single tau-bench task; returns trajectory dict.
-
-    Args:
-        domain: "retail" or "airline"
-        task_index: task_id in test split
-        client: reuse LLM client (or lazily build)
-        agent_system_prompt: override env.wiki for §Part IV/IX surface tests
-        max_num_steps: episode budget
-        seed: LLM seed
-    """
     if client is None:
         client = build_client()
 
-    # HUMAN user_strategy avoids external credential lookup; we replace env.user
-    # immediately with our own chat-completions-based simulator.
+
+
     env = get_env(
         env_name=domain,
         user_strategy=UserStrategy.HUMAN,
@@ -239,5 +224,5 @@ def solve_task(*, domain: str, task_index: int,
     }
 
 
-# Historical alias retained for older notebooks/scripts.
+
 AzureUserSimulator = LLMUserSimulator

@@ -1,11 +1,3 @@
-"""Exp 4.2 (Part IV): HotpotQA surface variants macro stability.
-
-Uses the supporting-facts subset defined by the experiment protocol.
-5 surface variants x 30 questions (using 40 available) = 150 runs.
-
-Success: macro dist (EM/F1 distribution) < local variance (per-question EM
-overlap between variants).
-"""
 from __future__ import annotations
 import json
 import sys
@@ -19,11 +11,11 @@ from lib.hotpotqa_runner import load_corpus, run_one_question
 _W2A_LIB = Path(__file__).resolve().parents[2] / "wave2a" / "lib"
 if str(_W2A_LIB) not in sys.path:
     sys.path.insert(0, str(_W2A_LIB))
-from metrics import error_jaccard, dist_distance  # type: ignore
+from metrics import error_jaccard, dist_distance
 
 
 SYSTEM_VARIANTS = {
-    "identity": None,  # default prompt
+    "identity": None,
     "paraphrase": (
         "You act as a HotpotQA multi-hop answering system. Read the passages "
         "and provide a single short answer (span, name, or yes/no). No prose."

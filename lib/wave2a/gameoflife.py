@@ -1,13 +1,3 @@
-"""Game of Life Prediction environment adapter for wave2a.
-
-Reuses simulator from experiments/anchor_setup/envs/game_of_life/simulator.py.
-
-Adds:
-  - init_state (random / clustered / mixture) with seed control
-  - LLM prompt "predict grid at t=k" (multi-checkpoint)
-  - per-cell error → 2D mask → fractal dim (metrics.box_counting_2d)
-  - normalized Hamming error e_{i,t} = H(X_t̂, X_t*) / L^2
-"""
 from __future__ import annotations
 
 import json
@@ -21,22 +11,21 @@ import numpy as np
 _ENV_PATH = Path(__file__).resolve().parents[3] / "experiments/anchor_setup/envs/game_of_life"
 if str(_ENV_PATH) not in sys.path:
     sys.path.insert(0, str(_ENV_PATH))
-from simulator import GameOfLife  # type: ignore
+from simulator import GameOfLife
 
 
 def gol_step(g: np.ndarray) -> np.ndarray:
-    """Wrapper around GameOfLife.step to return next-step grid as numpy array."""
     return GameOfLife(grid=g).step().grid
 
-# Wave 1 also has a golden reference
+
 _ENV_W1 = Path(__file__).resolve().parents[3] / "experiments/wave1/envs"
 if _ENV_W1.exists() and str(_ENV_W1) not in sys.path:
     sys.path.insert(0, str(_ENV_W1))
 
 
-# ---------------------------------------------------------------------------
-# Initial grid generation (§2.2 spec)
-# ---------------------------------------------------------------------------
+
+
+
 
 _PATTERNS = {
     "blinker": np.array([[1, 1, 1]], dtype=int),
@@ -53,7 +42,7 @@ def make_grid(L: int, kind: str, density: float = 0.2,
     if kind == "random":
         g = (rng.random((L, L)) < density).astype(int)
     elif kind == "clustered":
-        # 3 clusters of dense random around centers
+
         for _ in range(3):
             cy, cx = rng.integers(L // 4, 3 * L // 4, size=2)
             r = max(3, L // 6)
@@ -62,7 +51,7 @@ def make_grid(L: int, kind: str, density: float = 0.2,
                     if rng.random() < density * 2:
                         g[y, x] = 1
     elif kind == "mixture":
-        # scatter several known patterns
+
         for name in ["glider", "blinker", "block", "beehive"]:
             for _ in range(max(1, L // 32)):
                 p = _PATTERNS[name]
@@ -74,12 +63,11 @@ def make_grid(L: int, kind: str, density: float = 0.2,
     return g
 
 
-# ---------------------------------------------------------------------------
-# Rollout
-# ---------------------------------------------------------------------------
+
+
+
 
 def rollout(g0: np.ndarray, K: int) -> list[np.ndarray]:
-    """Ground-truth rollout using the anchor simulator."""
     trace = [g0.copy()]
     g = g0.copy()
     for _ in range(K):
@@ -88,14 +76,12 @@ def rollout(g0: np.ndarray, K: int) -> list[np.ndarray]:
     return trace
 
 
-# ---------------------------------------------------------------------------
-# Observation masking (partial observability)
-# ---------------------------------------------------------------------------
+
+
+
 
 def mask_observation(g0: np.ndarray, p_obs: float,
                      seed: int = 42) -> tuple[np.ndarray, np.ndarray]:
-    """Return (observed_grid, mask) where mask[y,x]=1 means cell is visible.
-    Unobserved cells shown as -1 in observed_grid."""
     rng = np.random.default_rng(seed)
     L = g0.shape[0]
     mask = (rng.random((L, L)) < p_obs).astype(int)
@@ -104,9 +90,9 @@ def mask_observation(g0: np.ndarray, p_obs: float,
     return obs, mask
 
 
-# ---------------------------------------------------------------------------
-# LLM prompt: multi-checkpoint prediction
-# ---------------------------------------------------------------------------
+
+
+
 
 _LLM_SYSTEM_GOL = (
     "You are a Conway's Game of Life predictor. Rules (deterministic, "
@@ -160,7 +146,6 @@ def _parse_gol_single(text: str, L: int) -> tuple[np.ndarray, str]:
 
 def llm_predict_grid_at_K(client, obs: np.ndarray, K: int,
                            llm_call: Callable) -> tuple[np.ndarray, dict]:
-    """Independent single-K prediction call. No multi-K self-consistency."""
     prompt = _make_gol_prompt_single(obs, K)
     resp = llm_call(client, system=_LLM_SYSTEM_GOL, user=prompt)
     grid, err = _parse_gol_single(resp["content"], obs.shape[0])
@@ -175,9 +160,9 @@ def llm_predict_grid_at_K(client, obs: np.ndarray, K: int,
     }
 
 
-# ---------------------------------------------------------------------------
-# Per-checkpoint error metrics
-# ---------------------------------------------------------------------------
+
+
+
 
 def per_grid_metrics(pred: np.ndarray, gold: np.ndarray) -> dict:
     L = gold.shape[0]

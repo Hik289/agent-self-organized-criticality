@@ -1,4 +1,3 @@
-"""ALFWorld single-trajectory analysis pipeline."""
 from __future__ import annotations
 import numpy as np
 import sys
@@ -10,7 +9,7 @@ from .alfworld_judges import local_judge_trajectory, global_judge_trajectory
 _W2A_LIB = Path(__file__).resolve().parents[2] / "wave2a" / "lib"
 if str(_W2A_LIB) not in sys.path:
     sys.path.insert(0, str(_W2A_LIB))
-from metrics import detect_avalanches  # type: ignore
+from metrics import detect_avalanches
 
 TAU_F = 0.5
 TAU_E = 0.5

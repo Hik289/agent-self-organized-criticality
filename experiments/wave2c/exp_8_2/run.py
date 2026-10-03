@@ -1,18 +1,3 @@
-"""Exp 8.2 (Part VIII): embodied state graph fractal D_f — ALFWorld.
-
-5 task graph types x 30 tasks = 150 tasks.
-
-We approximate the 5 task graph types by ALFWorld task subtypes:
-  localized: pick_and_place_simple      (single room, single object)
-  multi_room: look_at_obj_in_light      (may traverse multiple rooms)
-  container: pick_clean_then_place_in_recep (container dependency)
-  inventory: pick_heat_then_place_in_recep  (heating chain)
-  long_chain: pick_two_obj_and_place      (2 objects, long chain)
-
-For each traj: build error grid from step_events (each step is a cell on a
-grid); mark error cells (action NOT in admissible or reward-negative).
-Box-counting D_f on the error mask.
-"""
 from __future__ import annotations
 import json
 import sys
@@ -26,7 +11,7 @@ from lib.alfworld_runner import list_games_by_type
 _W2A_LIB = Path(__file__).resolve().parents[2] / "wave2a" / "lib"
 if str(_W2A_LIB) not in sys.path:
     sys.path.insert(0, str(_W2A_LIB))
-from metrics import box_counting_2d  # type: ignore
+from metrics import box_counting_2d
 
 CONFIG_PATH = "./experiments/wave1/envs/alfworld/base_config.yaml"
 
@@ -50,12 +35,11 @@ def build_task_list(per_type: int):
 
 
 def _fractal_over_error_positions(traj_row) -> dict:
-    """Build error grid from L_series (steps where L=0 → error position)."""
     L = traj_row.get("L_series", [])
     n = len(L)
     if n < 4:
         return {"D_f": None, "n_scales": 0}
-    # Layout: n steps -> sqrt(n) x sqrt(n) grid
+
     grid_side = max(4, int(np.ceil(np.sqrt(n))))
     mask = np.zeros((grid_side, grid_side), dtype=bool)
     for step_i, l in enumerate(L):

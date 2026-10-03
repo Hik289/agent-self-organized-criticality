@@ -1,9 +1,3 @@
-"""Runner scaffolding for StatefulPuzzle-SOC experiments (step-by-step).
-
-Each trajectory = H LLM calls (one per step) + env actions + submit.
-Trajectories inside a cell are run concurrently (bounded thread pool) to
-overlap network latency; steps within a trajectory are inherently sequential.
-"""
 from __future__ import annotations
 
 import json
@@ -21,7 +15,7 @@ from .statefulpuzzle import (
 )
 
 
-CONCURRENCY_PER_CELL = 4  # bounded to avoid backend rate limits
+CONCURRENCY_PER_CELL = 4
 
 
 def _run_one(cell_id: str, cfg_template: StatefulPuzzleConfig, traj_idx: int,
@@ -163,7 +157,7 @@ def run_experiment(*, exp_id: str, cells: list,
                     j = futs[fut]
                     try:
                         out = fut.result()
-                    except Exception as e:  # noqa: BLE001
+                    except Exception as e:
                         logf.write(f"  {cell_id}[{j}] EXCEPTION {type(e).__name__}: {e}\n")
                         logf.flush()
                         continue
@@ -187,7 +181,7 @@ def run_experiment(*, exp_id: str, cells: list,
                     all_rows.append(r)
             logf.write(f"CELL_DONE {cell_id} ({done_count}/{n_traj_per_cell}) cost=${total_cost:.4f}\n")
             logf.flush()
-            # incremental save after each cell (rescue against silent SSL stalls)
+
             try:
                 _partial_summary = {"exp_id": exp_id, "seed": seed,
                                     "n_cells_done": cells.index((cell_id, cfg, extra_meta)) + 1,

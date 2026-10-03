@@ -1,14 +1,3 @@
-"""Exp 5.2 (Part V): stress-triggered intervention — Retail.
-
-4 intervention policies (via agent system prompt append):
-  none                       — no additional directive
-  periodic                   — check every 3 steps
-  stress_triggered           — check if uncertainty/contradiction accumulating
-  late_final                 — check only before submit
-n=30 tasks per policy = 120 tasks.
-
-Judgment: stress_triggered should have highest reward + lowest collapse.
-"""
 from __future__ import annotations
 import json
 import sys

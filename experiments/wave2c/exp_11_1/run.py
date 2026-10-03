@@ -1,16 +1,3 @@
-"""Exp 11.1 (Part XI): subcritical/critical/supercritical regime — ALFWorld.
-
-5 regime settings x 30 tasks = 150 tasks.
-
-Regimes (agent system prompt append):
-  high_verify_low_explore: always look/examine, no exploration
-  medium_verify_medium_explore: balance
-  low_verify_high_explore: skip verification, try new actions
-  memory_heavy_unchecked: chain many actions based on cached beliefs
-  plan_reset_enabled: reset plan on inconsistency
-
-Baseline task pool: mix from all 6 task types to balance difficulty.
-"""
 from __future__ import annotations
 import json
 import sys
@@ -69,16 +56,14 @@ TYPES_MIX = [
 
 
 def build_task_list(per_regime: int):
-    """Return list of (game_file, cell_meta) where each regime uses the same
-    task pool for paired comparability."""
     games_by = list_games_by_type(CONFIG_PATH)
-    # Build a balanced mix of ~30 tasks: 5 per type across 6 types = 30
+
     per_type_target = max(1, per_regime // len(TYPES_MIX))
     base_games = []
     for tt in TYPES_MIX:
         games = games_by.get(tt, [])[:per_type_target]
         base_games.extend(games)
-    # top up to per_regime by cycling
+
     while len(base_games) < per_regime:
         for tt in TYPES_MIX:
             games = games_by.get(tt, [])
@@ -125,7 +110,7 @@ def main():
     tasks = build_task_list(args.per_regime)
     print(f"Running {len(tasks)} tasks...")
 
-    # Patch batch_runner to pass regime prompt via cell_meta
+
     from lib import alfworld_batch_runner as br
     _orig = br._run_one
 

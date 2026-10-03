@@ -1,8 +1,3 @@
-"""Single-tau-bench-trajectory analysis pipeline.
-
-Input: raw traj dict from taubench_runner.solve_task
-Output: metrics dict (F_series, e_series, sigma_series, avalanche, C_i, ...).
-"""
 from __future__ import annotations
 import numpy as np
 
@@ -10,12 +5,12 @@ from .taubench_extractor import extract_trajectory, sigma_series_from_z
 from .taubench_judges import local_judge_trajectory, global_judge_trajectory
 import sys
 from pathlib import Path
-# reuse wave2a lib.metrics — add wave2a *lib* dir to sys.path so we can
-# import module directly (avoid name conflict with our own lib package)
+
+
 _W2A_LIB = Path(__file__).resolve().parents[2] / "wave2a" / "lib"
 if str(_W2A_LIB) not in sys.path:
     sys.path.insert(0, str(_W2A_LIB))
-from metrics import detect_avalanches  # type: ignore
+from metrics import detect_avalanches
 
 TAU_F = 0.5
 TAU_E = 0.5
@@ -30,10 +25,10 @@ def analyze_trajectory(traj: dict) -> dict:
     e_series = [1.0 - f for f in F_series]
     sigma_series = sigma_series_from_z(zs)
 
-    # Avalanche stats on e_series
+
     aval = detect_avalanches(np.asarray(e_series, dtype=float), tau_e=TAU_E, window_w=2)
 
-    # T_col
+
     H = len(F_series)
     T_col = H + 1
     for t, f in enumerate(F_series):
@@ -41,7 +36,7 @@ def analyze_trajectory(traj: dict) -> dict:
             T_col = t
             break
 
-    # Recovery time
+
     recovery = H + 1 - T_col
     if T_col <= H:
         for t in range(T_col + 1, H):
@@ -49,7 +44,7 @@ def analyze_trajectory(traj: dict) -> dict:
                 recovery = t - T_col
                 break
 
-    # Δ^LG per step
+
     delta_LG = [(int(L_series[t]) - float(F_series[t])) for t in range(H)]
 
     return {

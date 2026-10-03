@@ -1,6 +1,3 @@
-"""Exp 7.1 (§Part VII): paired divergence D ∈ {1,2,4} (STEP-BY-STEP).
-H=32, ρ=0.10. 30 pairs/D → 90 pairs = 180 traj.
-"""
 from __future__ import annotations
 import json, sys, time
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -14,8 +11,8 @@ from lib.statefulpuzzle import StatefulPuzzleConfig, StatefulPuzzleSOC, run_step
 from lib.pipeline import analyze_trajectory
 from lib.metrics import fit_power_and_exp
 
-D_LEVELS = [1, 2, 4, 6, 8]  # updated per spec review
-H, V, S = 128, 8, 20  # updated per spec review
+D_LEVELS = [1, 2, 4, 6, 8]
+H, V, S = 128, 8, 20
 RHO = 0.10
 SEED_BASE = 42
 CONCURRENCY = 4

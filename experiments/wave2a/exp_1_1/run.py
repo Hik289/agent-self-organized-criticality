@@ -1,17 +1,3 @@
-"""Exp 1.1 (§Part I): vary memory-corruption stress ρ (STEP-BY-STEP).
-
-Design (locked after pilot v1/v2 calibration):
-  H=32, D=1, V=8, S=20, seed=42, temp=0.0
-  D=1 chosen so LLM baseline (σ=0, ρ=0) has ~40% clean trajectories.
-  H=64 D=4 saturated the LLM at baseline, drowning the stress signal.
-  Stress σ ↔ env retrieval corruption ρ (§2.1 memory corruption ratio).
-  No obs0 trigger — stress-only encoding proved cleaner.
-
-  σ ∈ {0,1,2,4,8,16} → ρ ∈ {0.00,0.05,0.10,0.20,0.40,0.80}
-  n=30 per cell → 180 traj total (~6k LLM calls, ~$1.5 estimated).
-
-Success: σ→collapse AUROC ≥ 0.75.
-"""
 from __future__ import annotations
 import json, sys
 from pathlib import Path
@@ -24,7 +10,7 @@ from lib.statefulpuzzle import StatefulPuzzleConfig
 from lib.metrics import auroc
 
 SIGMA_TO_RHO = {0: 0.00, 1: 0.05, 2: 0.10, 4: 0.20, 8: 0.40, 16: 0.80}
-H, D = 64, 1  # updated per spec review
+H, D = 64, 1
 
 def build_cells():
     cells, rho_by, obs0_by = [], {}, {}

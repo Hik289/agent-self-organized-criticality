@@ -1,9 +1,3 @@
-"""ALFWorld trajectory runner adapted from experiments/wave1/envs/alfworld/run_smoke.py.
-
-Runs a single ALFWorld game to completion or MAX_STEPS. Returns per-step
-trajectory + step_events for extractor/judges.
-Thread-safe: fresh env instance per call.
-"""
 from __future__ import annotations
 import os
 import re
@@ -11,11 +5,11 @@ import time
 
 from .azure_client import build_client, AZURE_DEPLOYMENT, price
 
-# Set ALFWORLD_DATA before any alfworld import (runtime side-effect)
+
 ALFWORLD_DATA = "./data/alfworld"
 os.environ["ALFWORLD_DATA"] = ALFWORLD_DATA
 
-# Task-type labels (§spec 6 categories: Pick, Put, Clean, Heat, Cool, Look)
+
 TASK_TYPE_LABELS = {
     "pick_and_place_simple": "Pick_Put",
     "look_at_obj_in_light": "Look",
@@ -42,10 +36,6 @@ def _load_config(config_path: str) -> dict:
 
 
 def list_games_by_type(config_path: str, split: str = "eval_in_distribution") -> dict[str, list[str]]:
-    """Return {task_type -> list of game_file paths}.
-
-    Call once per pilot; cheap.
-    """
     from alfworld.agents.environment import get_environment
     config = _load_config(config_path)
     AlfredTWEnv = get_environment("AlfredTWEnv")
@@ -69,7 +59,6 @@ def list_games_by_type(config_path: str, split: str = "eval_in_distribution") ->
 def _agent_pick_action(client, obs: str, admissible: list[str], task_desc: str,
                        step: int, history: list[str],
                        system_prompt: str = DEFAULT_AGENT_SYSTEM) -> tuple[str, dict]:
-    """Ask the LLM to choose one admissible action."""
     admissible = list(admissible)
     if not admissible:
         return "", {"tokens_in": 0, "tokens_out": 0, "cost_usd": 0.0,
@@ -123,10 +112,6 @@ def run_alfworld_game(*, config_path: str, game_file: str,
                       client=None, max_steps: int = 30,
                       system_prompt: str = DEFAULT_AGENT_SYSTEM,
                       split: str = "eval_in_distribution") -> dict:
-    """Run one ALFWorld game to completion or max_steps.
-
-    Returns trajectory dict with step_events, task_type, reward, etc.
-    """
     if client is None:
         client = build_client()
 
@@ -195,7 +180,7 @@ def run_alfworld_game(*, config_path: str, game_file: str,
         won = info_next.get("won", [False])
         won0 = won[0] if isinstance(won, (list, tuple)) else won
         n_admissible = len(admissible)
-        # Record the step event BEFORE we overwrite admissible for next step
+
         step_events.append({
             "step": step,
             "action_name": action,

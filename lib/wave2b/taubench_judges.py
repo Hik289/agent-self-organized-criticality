@@ -1,21 +1,6 @@
-"""Tau-bench local/global judges (§3.3 — isolation invariant preserved).
-
-Local judge: sees only (current user msg / env reply, current action).
-  L=1 iff:
-    - action is a known tool name for the domain OR "respond"
-    - action kwargs are non-empty for tool actions (basic well-formedness)
-    - env did NOT reply with error text
-
-Global judge: uses full trajectory + gold_actions + task reward.
-  F_{i,t} per step = per-step action match rate (running):
-    F_{i,t} = (number of gold actions matched so far) / (number of gold actions total)
-  When there is no gold action for that step (agent taking extra tool), F stays.
-  Final G_i = task reward (0 or 1 or fractional per tau-bench convention).
-  Collapse indicator C_i = 1 if G_i < 0.5 OR min_t F_{i,t} < 0.5 at end.
-"""
 from __future__ import annotations
 
-# Domain tool sets (loaded from taubench_extractor imports)
+
 RETAIL_TOOLS = frozenset({
     "find_user_id_by_name_zip", "find_user_id_by_email", "get_user_details",
     "get_order_details", "get_product_details", "list_all_product_types",
@@ -52,7 +37,6 @@ def _assert_no_gold_leak(step_view: dict) -> None:
 
 
 def local_judge_step(step_view: dict, *, domain: str) -> tuple[int, str]:
-    """Return (L_t, reason)."""
     _assert_no_gold_leak(step_view)
     action = step_view.get("action_name", "")
     kwargs = step_view.get("action_kwargs", {}) or {}
@@ -65,10 +49,10 @@ def local_judge_step(step_view: dict, *, domain: str) -> tuple[int, str]:
         return 0, "empty_action"
     if action not in known:
         return 0, f"unknown_tool:{action}"
-    # env reply error → local judge sees only what env said → L=0 if error visible
+
     if any(k in env_reply for k in ("error", "invalid", "not found", "failed")):
         return 0, "env_rejected_locally_visible"
-    # basic arg well-formedness: tool actions need non-empty kwargs (except think/list_all)
+
     if not kwargs and action not in ("list_all_product_types", "list_all_airports", "think"):
         return 0, "empty_kwargs"
     return 1, "tool_call_locally_valid"
@@ -78,7 +62,7 @@ def local_judge_trajectory(traj: dict) -> list[dict]:
     domain = traj["domain"]
     out = []
     for step in traj["step_events"]:
-        # strip forbidden keys defensively
+
         view = {k: v for k, v in step.items() if k in
                 ("step", "action_name", "action_kwargs", "env_reply_head")}
         L, reason = local_judge_step(view, domain=domain)
@@ -88,17 +72,15 @@ def local_judge_trajectory(traj: dict) -> list[dict]:
 
 
 def _action_matches_gold(agent_action: dict, gold_action: dict) -> bool:
-    """Structural match: name + kwargs subset. Tau-bench's own r_actions uses
-    strict equality; we relax to name + key kwargs match for robustness."""
     if agent_action.get("name") != gold_action.get("name"):
         return False
     ga = gold_action.get("kwargs") or {}
     aa = agent_action.get("kwargs") or {}
-    # Every gold-required kwarg must be present with matching value
+
     for k, v in ga.items():
         if k not in aa:
             return False
-        # Loose match for list values (order-insensitive)
+
         if isinstance(v, list) and isinstance(aa[k], list):
             if sorted(map(str, v)) != sorted(map(str, aa[k])):
                 return False
@@ -108,19 +90,6 @@ def _action_matches_gold(agent_action: dict, gold_action: dict) -> bool:
 
 
 def global_judge_trajectory(traj: dict, tau_F: float = 0.5) -> dict:
-    """Compute per-step F_{i,t} + collapse indicator + submit_ok.
-
-    F_t = (# gold_actions matched by step t) / max(1, min(t+1, n_gold))
-
-    This F starts at 1 iff step 0 matches gold_action_0, drops when the agent
-    takes a non-gold action (unnecessary tool call), and recovers when the
-    agent gets back on the gold path. Matches the §1 semantics: F is "how well
-    the world model matches gold at time t".
-
-    C_i = 1 iff reward < tau_F OR final F_t < tau_F. We use FINAL rather than
-    MIN because for a recovered task min_F drops early (before agent has taken
-    any gold actions), which is not a true collapse.
-    """
     gold_actions = traj.get("gold_actions", []) or []
     n_gold = len(gold_actions)
     matched = [False] * n_gold
@@ -128,7 +97,7 @@ def global_judge_trajectory(traj: dict, tau_F: float = 0.5) -> dict:
     F_per_step_events = []
     step_events = traj["step_events"]
     n_matched_so_far = 0
-    n_tool_steps = 0  # count only tool-call steps for F denominator (respond is neutral)
+    n_tool_steps = 0
     for step in step_events:
         agent_act = {"name": step.get("action_name"), "kwargs": step.get("action_kwargs", {})}
         if agent_act["name"] and agent_act["name"] != "respond":

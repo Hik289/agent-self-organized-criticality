@@ -1,18 +1,3 @@
-"""Exp 2.2 (Part II): verification policy vs wrong-basin escape — Retail.
-
-5 verification policies (agent_system_prompt override adds a verify directive
-before the standard wiki):
-  none                       — no additional directive
-  periodic                   — verify every 3 steps
-  after_api_error            — verify after any tool error
-  after_contradiction        — verify if belief contradicts environment reply
-  before_final_submit        — verify before any mutating action
-
-30 Retail tasks (task_index 0..29) per policy = 150 tasks total.
-
-Judgment: escape probability (recovery_time) monotonic with verify strength;
-after_contradiction should be best (recall §Part II qualitative table).
-"""
 from __future__ import annotations
 import json
 import sys
@@ -52,18 +37,12 @@ def build_task_list(n_max: int = 30):
     tasks = []
     for policy in VERIFY_DIRECTIVES:
         for i, t in enumerate(TASKS_TEST[:n_max]):
-            # Encode policy in cell_meta; task_index remains i
+
             tasks.append((i, {"task_index": i, "verify_policy": policy}))
     return tasks
 
 
 def build_agent_prompts(n_max: int = 30):
-    """Return dict {task_index -> None} — we use per-cell prompt override, not per-task.
-
-    We handle policy variation by passing agent_system_prompt_by_task keyed by
-    (task_index, policy) — but the runner API takes only task_index → prompt.
-    Workaround: we split into 5 runs (one per policy) using subdirs.
-    """
     return {}
 
 
@@ -102,7 +81,7 @@ def analyze_across_policies(all_rows_by_policy: dict[str, list]) -> dict:
             "mean_reward": float(R.mean()),
             "collapse_rate": float(C.mean()),
         }
-    # rank policies by (1 - collapse_rate) descending
+
     ranked = sorted(per_policy.items(),
                     key=lambda kv: kv[1].get("collapse_rate", 1.0))
     return {"per_policy": per_policy, "ranking_by_low_collapse": [p[0] for p in ranked]}
@@ -114,7 +93,7 @@ def main():
     ap.add_argument("--n", type=int, default=30)
     args = ap.parse_args()
 
-    # Patch taubench_runner to handle __APPEND_TO_WIKI__ marker.
+
     from lib import taubench_runner as tr
     _orig_solve = tr.solve_task
 

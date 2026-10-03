@@ -1,10 +1,3 @@
-"""Exp 7.2 (§Part VII): Game of Life weak-chaos over p_obs (STEP-BY-STEP).
-
-p_obs ∈ {0.25, 0.5, 0.75, 1.0}. Grid L=32. Checkpoints K ∈ {1,2,4,8,16,32,64}.
-INDEPENDENT LLM call per K (no multi-K self-consistency).
-
-n=30 traj/p_obs × 4 = 120 traj × 7 K = 840 calls.
-"""
 from __future__ import annotations
 
 import json
@@ -20,10 +13,10 @@ CONCURRENCY_PER_P = 4
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
-from lib.azure_client import build_client, chat  # noqa: E402
-from lib.gameoflife import (make_grid, rollout, mask_observation,  # noqa: E402
+from lib.azure_client import build_client, chat
+from lib.gameoflife import (make_grid, rollout, mask_observation,
                              llm_predict_grid_at_K, per_grid_metrics)
-from lib.metrics import fit_power_and_exp, box_counting_2d  # noqa: E402
+from lib.metrics import fit_power_and_exp, box_counting_2d
 
 
 L = 32

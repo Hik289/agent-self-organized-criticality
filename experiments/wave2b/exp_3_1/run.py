@@ -1,17 +1,3 @@
-"""Exp 3.1 (Part III): local valid, global wrong — Airline.
-
-Airline test split (50 tasks), stratified by dependency depth:
-  single_step (n_gold_actions=1)
-  two_step (n_gold_actions=2)
-  multi_constraint (n_gold_actions=3-4)
-  policy_conflict (n_gold_actions=5-6 OR instruction contains cancel/refund/downgrade)
-  state_changing (n_gold_actions>=7)
-
-Note: due to airline test set being only 50 tasks (not the spec's 125), we
-run ALL 50 tasks and post-hoc classify. Cell counts may be uneven.
-
-Success: F drops before L, Δ^LG > 0 at policy_conflict + state_changing.
-"""
 from __future__ import annotations
 import json
 import sys
@@ -65,7 +51,7 @@ def analyze(rows):
         delta = [np.mean(r["delta_LG_series"]) for r in rs]
         T = np.array([r["T_col"] for r in rs])
         C = np.array([r["collapse_indicator"] for r in rs])
-        # First invalid action time (first L=0)
+
         first_L0 = []
         for r in rs:
             for i, l in enumerate(r["L_series"]):
@@ -73,7 +59,7 @@ def analyze(rows):
                     first_L0.append(i); break
             else:
                 first_L0.append(len(r["L_series"]))
-        # F collapse time = T_col
+
         per_dep[dep] = {
             "n": len(rs),
             "mean_L": float(np.mean(L)),

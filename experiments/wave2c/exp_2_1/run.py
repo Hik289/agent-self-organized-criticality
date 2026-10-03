@@ -1,17 +1,3 @@
-"""Exp 2.1 (Part II): metastable belief basins — ALFWorld.
-
-3 observation visibility conditions x 6 task types x 15 tasks = 270 tasks.
-- full: default agent prompt (agent sees full obs + admissible)
-- partial: agent prompt tells "some observations may be incomplete"
-- delayed: agent prompt tells "your observations are 3-step lagged"
-
-Note: since we can't actually modify the env obs, the "visibility" condition
-is a *prompt-level* proxy encouraging different agent behavior. This is the
-best single-model approximation.
-
-Success: partial/delayed should have longer wrong-basin residence time
-(measured via consecutive_look ratio and F drop time).
-"""
 from __future__ import annotations
 import json
 import sys
@@ -49,11 +35,6 @@ CANONICAL_TYPES = [
 
 
 def build_task_list(per_cell: int, subset_types: list = None):
-    """Return (tasks, prompts_by_game).
-
-    Each task_index_local ~= game_file. Same task appears in all 3 vis conditions
-    (paired design for maximum comparability).
-    """
     games_by = list_games_by_type(CONFIG_PATH)
     types_to_use = subset_types or CANONICAL_TYPES
     tasks = []
@@ -77,15 +58,15 @@ def analyze(rows):
         R = np.array([r["reward"] for r in rs])
         S = np.array([r["n_steps"] for r in rs])
         C = np.array([r["collapse_indicator"] for r in rs])
-        # wrong-basin residence proxy: number of consecutive_look episodes
+
         residence = []
         for r in rs:
             sigma = r["sigma_series"]
-            # count runs of consecutive_look >= 2
+
             runs = 0
             in_run = False
             for s in sigma:
-                if s >= 2:  # threshold for elevated stress
+                if s >= 2:
                     if not in_run:
                         runs += 1
                         in_run = True
@@ -113,13 +94,13 @@ def main():
 
     subset = [s.strip() for s in args.subset.split(",") if s.strip()] or None
 
-    # Patch batch_runner to accept per-(game,vis) prompts via cell_meta
+
     from lib import alfworld_batch_runner as br
     _orig_run_one = br._run_one
 
     def _run_one_with_prompt(game_file, cell_meta, *, client,
                              system_prompt=None, max_steps=30):
-        # Look up prompt by (game, vis)
+
         vis = cell_meta.get("visibility")
         if vis and vis in VISIBILITY_PROMPTS:
             system_prompt = VISIBILITY_PROMPTS[vis]

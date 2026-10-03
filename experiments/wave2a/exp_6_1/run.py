@@ -1,6 +1,3 @@
-"""Exp 6.1 (§Part VI): spectral analysis H ∈ {32,64,128,256} (STEP-BY-STEP).
-D=1, ρ=0.20. n=30/H → 120 traj.
-"""
 from __future__ import annotations
 import json, sys
 from pathlib import Path
@@ -16,7 +13,7 @@ RHO, D = 0.20, 1
 
 def build_cells():
     cells, rho_by = [], {}
-    for H in [64, 128, 256, 512]:  # updated per spec review
+    for H in [64, 128, 256, 512]:
         cid = f"H_{H}"
         cfg = StatefulPuzzleConfig(H=H, S=20, D=D, V=8, seed=42, perturbation=None)
         cells.append((cid, cfg, {"H": H, "rho": RHO})); rho_by[cid] = RHO

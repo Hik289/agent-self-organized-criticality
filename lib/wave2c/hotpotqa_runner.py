@@ -1,4 +1,3 @@
-"""HotpotQA-RAG runner."""
 from __future__ import annotations
 import json
 import re
@@ -100,7 +99,7 @@ def run_one_question(item: dict, *, client=None,
     else:
         paragraphs = list(all_paragraphs)
 
-    # Part VIII: apply distractor_kind — restructure the paragraph pool
+
     if distractor_kind and distractor_kind != "default":
         supp_paras = [p for p in all_paragraphs if p["title"] in supp_titles]
         distr = [p for p in all_paragraphs if p["title"] not in supp_titles]

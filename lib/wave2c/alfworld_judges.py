@@ -1,13 +1,3 @@
-"""ALFWorld local/global judges (§3.3, isolation invariant preserved).
-
-Local judge: sees only (obs, action). L=1 iff action is admissible AND was
-picked via exact match (not fuzzy substring).
-
-Global judge: uses full trajectory + final reward.
-F_{i,t} per step = (step_index + 1) / max_steps_expected, weighted by whether
-action was in admissible. Final F equals the env reward (0 or 1).
-C_i = 1 if reward < 0.5.
-"""
 from __future__ import annotations
 
 
@@ -42,7 +32,7 @@ def local_judge_step(step_view: dict) -> tuple[int, str]:
         return 0, "no_admissible"
     if picked == "llm_error":
         return 0, "llm_error"
-    # env-side failure signal
+
     if "nothing happens" in env_reply or "you can't" in env_reply:
         return 0, "env_no_effect"
     return 1, "action_locally_valid"
@@ -61,30 +51,26 @@ def local_judge_trajectory(traj: dict) -> list[dict]:
 
 
 def global_judge_trajectory(traj: dict, tau_F: float = 0.5) -> dict:
-    """F_{i,t} approx = running action-in-admissible rate weighted by step progress.
-
-    Final F is the env's binary reward (won or not).
-    """
     step_events = traj["step_events"]
     H = len(step_events)
     reward = float(traj.get("reward", 0.0))
     won = bool(reward >= 0.5)
 
-    # Per-step F: running valid-action rate weighted by task progress.
-    # If task won, all steps get F=1 (retrospectively). If not, F declines.
+
+
     F_series = []
     n_valid = 0
     for i, step in enumerate(step_events):
         if step.get("action_in_admissible"):
             n_valid += 1
-        # basic progress-weighted validity
+
         valid_rate = n_valid / (i + 1)
-        # If task ultimately won, F rises toward 1 near the end
+
         if won:
             F_series.append(valid_rate * 0.5 + 0.5)
         else:
-            F_series.append(valid_rate * 0.5)  # capped at 0.5 = collapse floor
-    # Force final F to reflect env reward
+            F_series.append(valid_rate * 0.5)
+
     if F_series:
         F_series[-1] = reward if won else max(0.0, F_series[-1] - 0.1)
 

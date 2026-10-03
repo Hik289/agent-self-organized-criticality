@@ -1,11 +1,3 @@
-"""Exp 9.2 (Part IX): collapse universality classes — Retail.
-
-**SECONDARY ANALYSIS**: reuses exp_1_2 trajectories. No new API calls.
-
-Cluster tasks by macro feature vector (A_i, T_col, wsf_drop, sigma_slope,
-final_F, n_gold_actions). Compare cluster labels with task_family
-(inferred from instruction keywords).
-"""
 from __future__ import annotations
 import json
 import sys
@@ -53,20 +45,20 @@ def cluster(rows, raws_by_task):
     k = min(6, len(X))
     km = KMeans(n_clusters=k, random_state=42, n_init=10).fit(Xs)
     cluster_ids = km.labels_.tolist()
-    # cross-tab family vs cluster
+
     from collections import Counter
     ct = {}
     for f, c in zip(labels, cluster_ids):
         ct.setdefault(f, Counter())[c] += 1
 
-    # within-cluster spread (avg pairwise distance)
+
     within_spread = []
     for c in set(cluster_ids):
         mask = np.array(cluster_ids) == c
         if mask.sum() > 1:
             centroid = Xs[mask].mean(axis=0)
             within_spread.append(float(np.linalg.norm(Xs[mask] - centroid, axis=1).mean()))
-    # between-cluster spread (avg centroid distance)
+
     centroids = km.cluster_centers_
     between = []
     for i in range(len(centroids)):

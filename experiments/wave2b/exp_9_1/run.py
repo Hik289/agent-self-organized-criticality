@@ -1,12 +1,3 @@
-"""Exp 9.1 (Part IX): cross-prompt macro stability — Retail.
-
-5 prompt variants (paraphrase / format / tool-wording changes on retail wiki).
-Since we're single-model, this replaces the "cross-model" spec with "cross-prompt".
-
-n=30 tasks per variant = 150 tasks.
-
-Judgment: local error overlap low, macro A_i distribution KS distance small.
-"""
 from __future__ import annotations
 import json
 import sys
@@ -20,7 +11,7 @@ from lib.tb_runner import run_experiment
 _W2A_LIB = Path(__file__).resolve().parents[2] / "wave2a" / "lib"
 if str(_W2A_LIB) not in sys.path:
     sys.path.insert(0, str(_W2A_LIB))
-from metrics import error_jaccard, dist_distance  # type: ignore
+from metrics import error_jaccard, dist_distance
 
 
 VARIANT_APPEND = {
@@ -69,7 +60,7 @@ def analyze(all_rows_by_variant: dict[str, list]):
             "A_std": float(A.std()), "collapse_rate": float(C.mean()),
             "mean_reward": float(R.mean()),
         }
-    # jaccard + macro dist vs identity
+
     id_rows = all_rows_by_variant.get("identity", [])
     id_err_ts = {r["task_id"]: [t for t, e in enumerate(r["e_series"]) if e > 0.5]
                  for r in id_rows}

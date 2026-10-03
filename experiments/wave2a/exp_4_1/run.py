@@ -1,6 +1,3 @@
-"""Exp 4.1 (§Part IV): surface transformation stability (STEP-BY-STEP).
-H=32, D=1, ρ=0.20 (moderate). 6 surface prompt variants × 30 traj = 180 traj.
-"""
 from __future__ import annotations
 import json, sys
 from pathlib import Path
@@ -12,7 +9,7 @@ from lib.sp_runner import run_experiment
 from lib.statefulpuzzle import StatefulPuzzleConfig, DEFAULT_SYSTEM
 from lib.metrics import error_jaccard, dist_distance
 
-RHO, H, D = 0.20, 64, 1  # updated per spec review
+RHO, H, D = 0.20, 64, 1
 
 SURFACE_VARIANTS = {
     "identity": DEFAULT_SYSTEM,

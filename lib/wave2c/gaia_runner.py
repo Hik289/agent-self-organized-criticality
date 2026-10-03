@@ -1,6 +1,3 @@
-"""GAIA runner adapted from experiments/wave1/harness/gaia/run_smoke_real.py.
-Runs a single task with tool-calling agent. Returns full trajectory with step_events.
-"""
 from __future__ import annotations
 import json
 import sys
@@ -8,13 +5,13 @@ import time
 from pathlib import Path
 from typing import Any
 
-# Add wave1 gaia dir to path for tools + scorer
+
 _WAVE1_GAIA = Path("./experiments/wave1/harness/gaia")
 if str(_WAVE1_GAIA) not in sys.path:
     sys.path.insert(0, str(_WAVE1_GAIA))
 try:
-    from tools import TOOLS_SCHEMA, call_tool  # type: ignore
-    from gaia_scorer import score  # type: ignore
+    from tools import TOOLS_SCHEMA, call_tool
+    from gaia_scorer import score
 except ImportError:
     TOOLS_SCHEMA = []
     call_tool = None
@@ -120,7 +117,7 @@ def run_one_task(task: dict, *, client=None,
                 "step": step, "action_name": "text_response",
                 "action_kwargs": {}, "step_type": "intermediate_conclusion",
                 "env_reply_head": "",
-                "action_in_admissible": True,  # text response is always valid
+                "action_in_admissible": True,
                 "picked_match_type": "exact",
             })
             break
@@ -170,7 +167,7 @@ def run_one_task(task: dict, *, client=None,
 
     wall = time.perf_counter() - t0
 
-    # Score
+
     correct = 0
     if score is not None and final_answer is not None:
         try:

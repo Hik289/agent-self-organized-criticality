@@ -15,7 +15,7 @@
 </p>
 
 <p align="center">
-  <img src="assets/agent-soc-overview.webp" alt="Abstract visualization of self-organized criticality in long-horizon agents" width="95%">
+  <img src="assets/agent-soc-overview.png" alt="Framework overview: record interactions, align world states, measure dynamics, and test signatures" width="95%">
 </p>
 
 Official code release for **World Model Science: Self-Organized Criticality, Weak Chaos, and Metastable Belief Dynamics in Long-Horizon LLM Agents**.
@@ -111,16 +111,16 @@ committed.
 ├── citation.bib
 ├── requirements.txt
 ├── assets/
-│   ├── agent-soc-overview.webp
+│   ├── agent-soc-overview.png
 │   └── agent-soc-pipeline.webp
 ├── lib/
-│   ├── wave2a/        # StatefulPuzzle-SOC + Game of Life utilities
-│   ├── wave2b/        # tau-bench utilities
-│   └── wave2c/        # ALFWorld / GAIA / HotpotQA utilities
+│   ├── wave2a/
+│   ├── wave2b/
+│   └── wave2c/
 └── experiments/
-    ├── wave2a/        # synthetic memory, GoL, spectral, weak-chaos tests
-    ├── wave2b/        # tau-bench Retail/Airline experiments
-    └── wave2c/        # embodied, RAG, and GAIA experiments
+    ├── wave2a/
+    ├── wave2b/
+    └── wave2c/
 ```
 
 The `experiments/wave2*/lib` links point to the corresponding root `lib/wave2*`

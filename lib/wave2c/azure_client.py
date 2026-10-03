@@ -1,4 +1,3 @@
-"""Provider-neutral LLM client shared across wave 2c."""
 from __future__ import annotations
 import os
 from openai import OpenAI
@@ -7,7 +6,7 @@ LLM_API_BASE_URL = os.getenv("LLM_API_BASE_URL", "https://YOUR_LLM_API_BASE_URL/
 LLM_MODEL = os.getenv("LLM_MODEL", "YOUR_MODEL_NAME")
 LLM_API_KEY = os.getenv("LLM_API_KEY", "YOUR_LLM_API_KEY")
 
-# Backward-compatible aliases used by existing experiment scripts.
+
 AZURE_ENDPOINT = LLM_API_BASE_URL
 AZURE_DEPLOYMENT = LLM_MODEL
 AZURE_CLIENT_KEY = LLM_API_KEY
