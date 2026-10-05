@@ -4,9 +4,9 @@ from pathlib import Path
 import numpy as np
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE.parent))
-from lib.sp_runner import run_experiment
-from lib.statefulpuzzle import StatefulPuzzleConfig
+sys.path.insert(0, str(HERE.parents[2] / "lib"))
+from wave2a.sp_runner import run_experiment
+from wave2a.statefulpuzzle import StatefulPuzzleConfig
 
 try:
     from scipy import stats; _HAS_SCIPY = True

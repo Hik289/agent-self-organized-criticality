@@ -1,13 +1,28 @@
 from __future__ import annotations
 import json
+import os
+import sys
 import time
+from pathlib import Path
 from typing import Any
 
 from openai import OpenAI
 
-from tau_bench.envs import get_env
-from tau_bench.envs.user import UserStrategy
-from tau_bench.types import Action, RESPOND_ACTION_NAME
+_TAU_BENCH_PATH = os.getenv("TAU_BENCH_PATH")
+if _TAU_BENCH_PATH:
+    _tau_root = Path(_TAU_BENCH_PATH).expanduser().resolve()
+    if not (_tau_root / "tau_bench" / "__init__.py").is_file():
+        raise FileNotFoundError("TAU_BENCH_PATH must point to a tau-bench checkout containing tau_bench.")
+    sys.path.insert(0, str(_tau_root))
+
+try:
+    from tau_bench.envs import get_env
+    from tau_bench.envs.user import UserStrategy
+    from tau_bench.types import Action, RESPOND_ACTION_NAME
+except ModuleNotFoundError as exc:
+    if exc.name == "tau_bench":
+        raise ModuleNotFoundError("Install tau-bench or set TAU_BENCH_PATH to its checkout.") from exc
+    raise
 
 from .azure_client import build_client, AZURE_DEPLOYMENT, price
 

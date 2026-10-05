@@ -5,8 +5,8 @@ from pathlib import Path
 import numpy as np
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE.parent))
-from lib.tb_runner import run_experiment
+sys.path.insert(0, str(HERE.parents[2] / "lib"))
+from wave2b.tb_runner import run_experiment
 
 
 def build_task_list(n_max: int = 200):

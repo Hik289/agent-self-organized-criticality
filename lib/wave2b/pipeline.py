@@ -3,14 +3,9 @@ import numpy as np
 
 from .taubench_extractor import extract_trajectory, sigma_series_from_z
 from .taubench_judges import local_judge_trajectory, global_judge_trajectory
-import sys
-from pathlib import Path
 
 
-_W2A_LIB = Path(__file__).resolve().parents[2] / "wave2a" / "lib"
-if str(_W2A_LIB) not in sys.path:
-    sys.path.insert(0, str(_W2A_LIB))
-from metrics import detect_avalanches
+from wave2a.metrics import detect_avalanches
 
 TAU_F = 0.5
 TAU_E = 0.5

@@ -2,12 +2,12 @@ from __future__ import annotations
 import os
 import re
 import time
+from pathlib import Path
 
 from .azure_client import build_client, AZURE_DEPLOYMENT, price
 
 
-ALFWORLD_DATA = "./data/alfworld"
-os.environ["ALFWORLD_DATA"] = ALFWORLD_DATA
+CONFIG_PATH = os.getenv("ALFWORLD_CONFIG")
 
 
 TASK_TYPE_LABELS = {
@@ -29,10 +29,18 @@ DEFAULT_AGENT_SYSTEM = (
 )
 
 
-def _load_config(config_path: str) -> dict:
+def _load_config(config_path: str | None) -> dict:
     import yaml
-    with open(config_path) as f:
-        return yaml.safe_load(f)
+    if not config_path:
+        raise ValueError("Set ALFWORLD_CONFIG to the ALFWorld YAML configuration file.")
+    path = Path(config_path).expanduser().resolve()
+    if not path.is_file():
+        raise FileNotFoundError(f"ALFWorld configuration does not exist: {path}")
+    with path.open() as f:
+        config = yaml.safe_load(f)
+    if not isinstance(config, dict):
+        raise ValueError("ALFWorld configuration must be a YAML mapping.")
+    return config
 
 
 def list_games_by_type(config_path: str, split: str = "eval_in_distribution") -> dict[str, list[str]]:

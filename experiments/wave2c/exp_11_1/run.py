@@ -5,14 +5,11 @@ from pathlib import Path
 import numpy as np
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE.parent))
-from lib.alfworld_batch_runner import run_experiment
-from lib.alfworld_runner import list_games_by_type, DEFAULT_AGENT_SYSTEM
-_W2A_LIB = Path(__file__).resolve().parents[2] / "wave2a" / "lib"
-if str(_W2A_LIB) not in sys.path:
-    sys.path.insert(0, str(_W2A_LIB))
+sys.path.insert(0, str(HERE.parents[2] / "lib"))
+from wave2c.alfworld_batch_runner import run_experiment
+from wave2c.alfworld_runner import list_games_by_type, DEFAULT_AGENT_SYSTEM
 
-CONFIG_PATH = "./experiments/wave1/envs/alfworld/base_config.yaml"
+from wave2c.alfworld_runner import CONFIG_PATH
 
 REGIME_PROMPTS = {
     "high_verify_low_explore": (
@@ -111,7 +108,7 @@ def main():
     print(f"Running {len(tasks)} tasks...")
 
 
-    from lib import alfworld_batch_runner as br
+    from wave2c import alfworld_batch_runner as br
     _orig = br._run_one
 
     def _patched(game_file, cell_meta, *, client, system_prompt=None, max_steps=30):

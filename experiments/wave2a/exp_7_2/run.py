@@ -12,11 +12,11 @@ import numpy as np
 CONCURRENCY_PER_P = 4
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE.parent))
-from lib.azure_client import build_client, chat
-from lib.gameoflife import (make_grid, rollout, mask_observation,
+sys.path.insert(0, str(HERE.parents[2] / "lib"))
+from wave2a.azure_client import build_client, chat
+from wave2a.gameoflife import (make_grid, rollout, mask_observation,
                              llm_predict_grid_at_K, per_grid_metrics)
-from lib.metrics import fit_power_and_exp, box_counting_2d
+from wave2a.metrics import fit_power_and_exp, box_counting_2d
 
 
 L = 32

@@ -5,15 +5,12 @@ from pathlib import Path
 import numpy as np
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE.parent))
-from lib.alfworld_batch_runner import run_experiment
-from lib.alfworld_runner import list_games_by_type
-_W2A_LIB = Path(__file__).resolve().parents[2] / "wave2a" / "lib"
-if str(_W2A_LIB) not in sys.path:
-    sys.path.insert(0, str(_W2A_LIB))
-from metrics import box_counting_2d
+sys.path.insert(0, str(HERE.parents[2] / "lib"))
+from wave2c.alfworld_batch_runner import run_experiment
+from wave2c.alfworld_runner import list_games_by_type
+from wave2a.metrics import box_counting_2d
 
-CONFIG_PATH = "./experiments/wave1/envs/alfworld/base_config.yaml"
+from wave2c.alfworld_runner import CONFIG_PATH
 
 TASK_GRAPH_TYPES = {
     "localized": "pick_and_place_simple",

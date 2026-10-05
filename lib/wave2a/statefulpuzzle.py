@@ -2,17 +2,19 @@ from __future__ import annotations
 
 import json
 import re
-import sys
-from pathlib import Path
 from typing import Callable
 
 import numpy as np
 
 
-_ENV_PATH = Path(__file__).resolve().parents[3] / "experiments/anchor_setup/envs/statefulpuzzle_soc"
-if str(_ENV_PATH) not in sys.path:
-    sys.path.insert(0, str(_ENV_PATH))
-from env import StatefulPuzzleConfig, StatefulPuzzleSOC
+from .external_harness import statefulpuzzle_types
+
+
+def __getattr__(name: str):
+    if name in {"StatefulPuzzleConfig", "StatefulPuzzleSOC"}:
+        config_type, environment_type = statefulpuzzle_types()
+        return {"StatefulPuzzleConfig": config_type, "StatefulPuzzleSOC": environment_type}[name]
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 
 

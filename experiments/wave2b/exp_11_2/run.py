@@ -5,8 +5,8 @@ from pathlib import Path
 import numpy as np
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE.parent))
-from lib.tb_runner import run_experiment
+sys.path.insert(0, str(HERE.parents[2] / "lib"))
+from wave2b.tb_runner import run_experiment
 
 
 REGIME_DIRECTIVES = {
@@ -70,7 +70,7 @@ def main():
     ap.add_argument("--n", type=int, default=30)
     args = ap.parse_args()
 
-    from lib import taubench_runner as tr
+    from wave2b import taubench_runner as tr
     _orig = tr.solve_task
 
     def patched(*, domain, task_index, client=None, agent_system_prompt=None,
@@ -79,7 +79,7 @@ def main():
             regime = agent_system_prompt.split("::", 1)[1]
             from tau_bench.envs import get_env
             from tau_bench.envs.user import UserStrategy
-            from lib.azure_client import build_client, AZURE_DEPLOYMENT
+            from wave2b.azure_client import build_client, AZURE_DEPLOYMENT
             if client is None:
                 client = build_client()
             env = get_env(env_name=domain, user_strategy=UserStrategy.HUMAN,

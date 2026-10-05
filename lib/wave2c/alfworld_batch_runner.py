@@ -4,10 +4,8 @@ import time
 from pathlib import Path
 
 from .azure_client import build_client
-from .alfworld_runner import run_alfworld_game
+from .alfworld_runner import CONFIG_PATH, run_alfworld_game
 from .alfworld_pipeline import analyze_trajectory
-
-CONFIG_PATH = "./experiments/wave1/envs/alfworld/base_config.yaml"
 
 
 def _run_one(game_file: str, cell_meta: dict, *, client,

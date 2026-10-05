@@ -4,10 +4,10 @@ from pathlib import Path
 import numpy as np
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE.parent))
-from lib.sp_runner import run_experiment
-from lib.statefulpuzzle import StatefulPuzzleConfig, DEFAULT_SYSTEM
-from lib.metrics import error_jaccard, dist_distance
+sys.path.insert(0, str(HERE.parents[2] / "lib"))
+from wave2a.sp_runner import run_experiment
+from wave2a.statefulpuzzle import StatefulPuzzleConfig, DEFAULT_SYSTEM
+from wave2a.metrics import error_jaccard, dist_distance
 
 RHO, H, D = 0.20, 64, 1
 

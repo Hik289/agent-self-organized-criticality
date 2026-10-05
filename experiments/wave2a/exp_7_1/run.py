@@ -5,11 +5,12 @@ from pathlib import Path
 import numpy as np
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE.parent))
-from lib.azure_client import build_client, chat
-from lib.statefulpuzzle import StatefulPuzzleConfig, StatefulPuzzleSOC, run_stepwise_trajectory, DEFAULT_SYSTEM
-from lib.pipeline import analyze_trajectory
-from lib.metrics import fit_power_and_exp
+sys.path.insert(0, str(HERE.parents[2] / "lib"))
+from wave2a.azure_client import build_client, chat
+from wave2a.statefulpuzzle import StatefulPuzzleConfig, StatefulPuzzleSOC, run_stepwise_trajectory, DEFAULT_SYSTEM
+from wave2a.pipeline import analyze_trajectory
+from wave2a.external_harness import require_statefulpuzzle_harness
+from wave2a.metrics import fit_power_and_exp
 
 D_LEVELS = [1, 2, 4, 6, 8]
 H, V, S = 128, 8, 20
@@ -50,6 +51,7 @@ def main():
     args = ap.parse_args()
     N_PAIRS = args.n
     HERE.mkdir(parents=True, exist_ok=True)
+    require_statefulpuzzle_harness()
     client = build_client()
     t0 = time.perf_counter(); total_cost = 0.0; all_pairs = []
     log = (HERE / "run.log").open("w")

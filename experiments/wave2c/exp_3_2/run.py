@@ -6,9 +6,9 @@ from pathlib import Path
 import numpy as np
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE.parent))
-from lib.azure_client import build_client
-from lib.gaia_runner import load_gaia_level1, run_one_task
+sys.path.insert(0, str(HERE.parents[2] / "lib"))
+from wave2c.azure_client import build_client
+from wave2c.gaia_runner import load_gaia_harness, load_gaia_level1, run_one_task
 
 
 def _local_judge_step(step: dict) -> int:
@@ -73,6 +73,7 @@ def main():
 
     HERE.mkdir(parents=True, exist_ok=True)
     tasks = load_gaia_level1(n_max=args.n)
+    load_gaia_harness()
     print(f"Loaded {len(tasks)} GAIA Level-1 tasks")
     client = build_client()
 

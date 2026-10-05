@@ -43,3 +43,6 @@ dist/
 logs/
 checkpoints/
 *.tmp
+results_partial.json
+trajectories.jsonl
+analysis_outputs/

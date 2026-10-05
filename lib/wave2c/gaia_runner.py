@@ -1,25 +1,17 @@
 from __future__ import annotations
 import json
+import importlib.util
+import os
 import sys
 import time
+from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
 
-_WAVE1_GAIA = Path("./experiments/wave1/harness/gaia")
-if str(_WAVE1_GAIA) not in sys.path:
-    sys.path.insert(0, str(_WAVE1_GAIA))
-try:
-    from tools import TOOLS_SCHEMA, call_tool
-    from gaia_scorer import score
-except ImportError:
-    TOOLS_SCHEMA = []
-    call_tool = None
-    score = None
-
 from .azure_client import build_client, AZURE_DEPLOYMENT, price
 
-METADATA_PATH = _WAVE1_GAIA / "gaia_metadata_validation.jsonl"
+METADATA_PATH = os.getenv("GAIA_METADATA_PATH")
 
 MAX_STEPS = 12
 
@@ -33,10 +25,47 @@ DEFAULT_AGENT_SYSTEM = (
 )
 
 
-def load_gaia_level1(n_max: int = 30) -> list[dict]:
-    if not METADATA_PATH.exists():
-        return []
-    with METADATA_PATH.open() as f:
+@lru_cache(maxsize=1)
+def load_gaia_harness():
+    configured = os.getenv("GAIA_HARNESS_DIR")
+    if not configured:
+        raise ValueError("Set GAIA_HARNESS_DIR to the original GAIA harness containing tools.py and gaia_scorer.py.")
+    root = Path(configured).expanduser().resolve()
+    paths = [root / "tools.py", root / "gaia_scorer.py"]
+    for path in paths:
+        if not path.is_file():
+            raise FileNotFoundError(f"Required GAIA harness module is missing: {path}")
+    if str(root) not in sys.path:
+        sys.path.insert(0, str(root))
+    modules = []
+    for path in paths:
+        name = f"_agent_soc_gaia_{path.stem}"
+        spec = importlib.util.spec_from_file_location(name, path)
+        if spec is None or spec.loader is None:
+            raise ImportError(f"Cannot load GAIA harness module: {path}")
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[name] = module
+        spec.loader.exec_module(module)
+        modules.append(module)
+    tools, scorer = modules
+    schemas = getattr(tools, "TOOLS_SCHEMA", None)
+    call_tool = getattr(tools, "call_tool", None)
+    score = getattr(scorer, "score", None)
+    if not isinstance(schemas, list) or not schemas or not callable(call_tool) or not callable(score):
+        raise ValueError("GAIA harness must provide nonempty TOOLS_SCHEMA, callable call_tool, and callable score.")
+    return schemas, call_tool, score
+
+
+def load_gaia_level1(n_max: int = 30, metadata_path: str | Path | None = None) -> list[dict]:
+    metadata_path = metadata_path or METADATA_PATH
+    if not metadata_path:
+        raise ValueError("Set GAIA_METADATA_PATH to the GAIA validation metadata JSONL file.")
+    path = Path(metadata_path).expanduser().resolve()
+    if not path.is_file():
+        raise FileNotFoundError(f"GAIA metadata does not exist: {path}")
+    if n_max <= 0:
+        raise ValueError("n_max must be positive.")
+    with path.open() as f:
         rows = [json.loads(line) for line in f if line.strip()]
     filtered = [
         {"task_id": r["task_id"], "level": r["Level"],
@@ -45,6 +74,8 @@ def load_gaia_level1(n_max: int = 30) -> list[dict]:
         for r in rows
         if r.get("Level") == 1 and (r.get("file_name") or "") == ""
     ]
+    if not filtered:
+        raise ValueError("GAIA metadata contains no Level-1 tasks without file attachments.")
     return filtered[:n_max]
 
 
@@ -66,6 +97,7 @@ def run_one_task(task: dict, *, client=None,
                  system_prompt: str = DEFAULT_AGENT_SYSTEM,
                  max_steps: int = MAX_STEPS,
                  seed: int = 42) -> dict:
+    tools_schema, call_tool, score = load_gaia_harness()
     if client is None:
         client = build_client()
 
@@ -88,7 +120,7 @@ def run_one_task(task: dict, *, client=None,
         try:
             resp = client.chat.completions.create(
                 model=AZURE_DEPLOYMENT, messages=messages,
-                tools=TOOLS_SCHEMA, temperature=0.0, seed=seed,
+                tools=tools_schema, temperature=0.0, seed=seed,
             )
         except Exception as e:
             stop_reason = f"llm_error: {type(e).__name__}: {e}"
@@ -148,10 +180,7 @@ def run_one_task(task: dict, *, client=None,
                 })
                 break
             else:
-                if call_tool is not None:
-                    result = call_tool(name, kwargs)
-                else:
-                    result = "tool not available"
+                result = call_tool(name, kwargs)
                 messages.append({"role": "tool", "tool_call_id": tc.id,
                                   "name": name, "content": result})
                 step_events.append({
@@ -169,11 +198,8 @@ def run_one_task(task: dict, *, client=None,
 
 
     correct = 0
-    if score is not None and final_answer is not None:
-        try:
-            correct = 1 if score(final_answer, task["final_answer"]) else 0
-        except Exception:
-            correct = 0
+    if final_answer is not None:
+        correct = 1 if score(final_answer, task["final_answer"]) else 0
 
     return {
         "task_id": task["task_id"],

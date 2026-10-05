@@ -1,18 +1,8 @@
 from __future__ import annotations
 
-import sys
-from pathlib import Path
-
 import numpy as np
 
-
-_A3 = Path(__file__).resolve().parents[2] / "anchor_3"
-if str(_A3) not in sys.path:
-    sys.path.insert(0, str(_A3))
-from state_extractor import extract_trajectory
-from local_judge import judge_trajectory as local_judge_traj
-from global_judge import judge_trajectory as global_judge_traj
-
+from .external_harness import anchor3_helpers
 from .metrics import sigma_series_from_z, detect_avalanches
 
 TAU_F = 0.5
@@ -31,6 +21,7 @@ def _per_t_last(records: list[dict], H: int, key: str, default) -> list:
 
 
 def analyze_trajectory(traj: dict) -> dict:
+    extract_trajectory, local_judge_traj, global_judge_traj = anchor3_helpers()
     H = int(traj["config"]["H"])
     zs = extract_trajectory(traj)
     L_records = local_judge_traj(traj)

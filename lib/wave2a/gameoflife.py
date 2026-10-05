@@ -2,25 +2,24 @@ from __future__ import annotations
 
 import json
 import re
-import sys
-from pathlib import Path
 from typing import Callable
 
 import numpy as np
 
-_ENV_PATH = Path(__file__).resolve().parents[3] / "experiments/anchor_setup/envs/game_of_life"
-if str(_ENV_PATH) not in sys.path:
-    sys.path.insert(0, str(_ENV_PATH))
-from simulator import GameOfLife
-
-
 def gol_step(g: np.ndarray) -> np.ndarray:
-    return GameOfLife(grid=g).step().grid
-
-
-_ENV_W1 = Path(__file__).resolve().parents[3] / "experiments/wave1/envs"
-if _ENV_W1.exists() and str(_ENV_W1) not in sys.path:
-    sys.path.insert(0, str(_ENV_W1))
+    grid = np.asarray(g)
+    if grid.ndim != 2 or 0 in grid.shape:
+        raise ValueError("Game of Life requires a nonempty two-dimensional grid.")
+    if not np.all((grid == 0) | (grid == 1)):
+        raise ValueError("Game of Life cells must be 0 or 1.")
+    height, width = grid.shape
+    padded = np.pad(grid.astype(np.int8, copy=False), 1, mode="constant")
+    neighbors = np.zeros((height, width), dtype=np.int8)
+    for dy in range(3):
+        for dx in range(3):
+            if dy != 1 or dx != 1:
+                neighbors += padded[dy:dy + height, dx:dx + width]
+    return ((neighbors == 3) | ((grid == 1) & (neighbors == 2))).astype(int)
 
 
 

@@ -5,13 +5,10 @@ from pathlib import Path
 import numpy as np
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE.parent))
-from lib.azure_client import build_client
-from lib.hotpotqa_runner import load_corpus, run_one_question
-_W2A_LIB = Path(__file__).resolve().parents[2] / "wave2a" / "lib"
-if str(_W2A_LIB) not in sys.path:
-    sys.path.insert(0, str(_W2A_LIB))
-from metrics import spectral_slope, dfa_exponent
+sys.path.insert(0, str(HERE.parents[2] / "lib"))
+from wave2c.azure_client import build_client
+from wave2c.hotpotqa_runner import load_corpus, run_one_question
+from wave2a.metrics import spectral_slope, dfa_exponent
 
 
 MEMORY_SETTINGS = {

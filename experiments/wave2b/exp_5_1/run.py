@@ -5,11 +5,8 @@ from pathlib import Path
 import numpy as np
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE.parent))
-_W2A_LIB = Path(__file__).resolve().parents[2] / "wave2a" / "lib"
-if str(_W2A_LIB) not in sys.path:
-    sys.path.insert(0, str(_W2A_LIB))
-from metrics import auroc
+sys.path.insert(0, str(HERE.parents[2] / "lib"))
+from wave2a.metrics import auroc
 
 
 CONF_KWD = ("cancel", "refund", "downgrade", "conflict")

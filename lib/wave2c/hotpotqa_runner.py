@@ -1,15 +1,17 @@
 from __future__ import annotations
 import json
+import os
 import re
 import string
 import time
 from collections import Counter
+from pathlib import Path
 
 from rank_bm25 import BM25Okapi
 from .azure_client import build_client, AZURE_DEPLOYMENT, price
 
 
-CORPUS_PATH = "./experiments/wave1/harness/hotpotqa_rag/corpus.jsonl"
+CORPUS_PATH = os.getenv("HOTPOTQA_CORPUS_PATH")
 _TOKEN = re.compile(r"[A-Za-z0-9]+")
 
 
@@ -43,12 +45,20 @@ def f1_score(pred: str, gold: str) -> float:
     return 2 * p * r / (p + r)
 
 
-def load_corpus() -> list[dict]:
+def load_corpus(corpus_path: str | Path | None = None) -> list[dict]:
+    corpus_path = corpus_path or CORPUS_PATH
+    if not corpus_path:
+        raise ValueError("Set HOTPOTQA_CORPUS_PATH to the prepared HotpotQA JSONL corpus.")
+    path = Path(corpus_path).expanduser().resolve()
+    if not path.is_file():
+        raise FileNotFoundError(f"HotpotQA corpus does not exist: {path}")
     items = []
-    with open(CORPUS_PATH) as f:
+    with path.open() as f:
         for line in f:
             if line.strip():
                 items.append(json.loads(line))
+    if not items:
+        raise ValueError("HotpotQA corpus contains no questions.")
     return items
 
 

@@ -4,10 +4,10 @@ from pathlib import Path
 import numpy as np
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE.parent))
-from lib.sp_runner import run_experiment
-from lib.statefulpuzzle import StatefulPuzzleConfig
-from lib.metrics import auroc
+sys.path.insert(0, str(HERE.parents[2] / "lib"))
+from wave2a.sp_runner import run_experiment
+from wave2a.statefulpuzzle import StatefulPuzzleConfig
+from wave2a.metrics import auroc
 
 SIGMA_TO_RHO = {0: 0.00, 1: 0.05, 2: 0.10, 4: 0.20, 8: 0.40, 16: 0.80}
 H, D = 64, 1

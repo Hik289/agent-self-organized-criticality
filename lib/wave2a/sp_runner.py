@@ -8,6 +8,7 @@ from typing import Any
 
 
 from .azure_client import build_client, chat
+from .external_harness import require_statefulpuzzle_harness
 from .pipeline import analyze_trajectory
 from .statefulpuzzle import (
     StatefulPuzzleConfig, StatefulPuzzleSOC,
@@ -111,6 +112,7 @@ def run_experiment(*, exp_id: str, cells: list,
                    K_history_by_cell: dict | None = None,
                    save_raw: bool = False,
                    concurrency: int = CONCURRENCY_PER_CELL) -> dict:
+    require_statefulpuzzle_harness()
     out_dir.mkdir(parents=True, exist_ok=True)
     client = build_client() if use_llm else None
     rho_by_cell = rho_by_cell or {}

@@ -5,13 +5,10 @@ from pathlib import Path
 import numpy as np
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE.parent))
-from lib.tb_runner import run_experiment
+sys.path.insert(0, str(HERE.parents[2] / "lib"))
+from wave2b.tb_runner import run_experiment
 
-_W2A_LIB = Path(__file__).resolve().parents[2] / "wave2a" / "lib"
-if str(_W2A_LIB) not in sys.path:
-    sys.path.insert(0, str(_W2A_LIB))
-from metrics import error_jaccard, dist_distance
+from wave2a.metrics import error_jaccard, dist_distance
 
 
 VARIANT_APPEND = {
@@ -88,7 +85,7 @@ def main():
     ap.add_argument("--n", type=int, default=30)
     args = ap.parse_args()
 
-    from lib import taubench_runner as tr
+    from wave2b import taubench_runner as tr
     _orig = tr.solve_task
 
     def patched(*, domain, task_index, client=None, agent_system_prompt=None,
@@ -97,7 +94,7 @@ def main():
             v = agent_system_prompt.split("::", 1)[1]
             from tau_bench.envs import get_env
             from tau_bench.envs.user import UserStrategy
-            from lib.azure_client import build_client, AZURE_DEPLOYMENT
+            from wave2b.azure_client import build_client, AZURE_DEPLOYMENT
             if client is None:
                 client = build_client()
             env = get_env(env_name=domain, user_strategy=UserStrategy.HUMAN,

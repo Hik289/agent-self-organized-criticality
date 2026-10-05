@@ -7,11 +7,11 @@ from pathlib import Path
 import numpy as np
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE.parent))
-from lib.azure_client import build_client
-from lib.alfworld_runner import run_alfworld_game, list_games_by_type
+sys.path.insert(0, str(HERE.parents[2] / "lib"))
+from wave2c.azure_client import build_client
+from wave2c.alfworld_runner import run_alfworld_game, list_games_by_type
 
-CONFIG_PATH = "./experiments/wave1/envs/alfworld/base_config.yaml"
+from wave2c.alfworld_runner import CONFIG_PATH
 CONCURRENCY = 1
 SATURATION_THRESHOLD = 0.80
 

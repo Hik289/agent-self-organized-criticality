@@ -4,10 +4,10 @@ from pathlib import Path
 import numpy as np
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE.parent))
-from lib.sp_runner import run_experiment
-from lib.statefulpuzzle import StatefulPuzzleConfig
-from lib.metrics import spectral_slope, dfa_exponent, bootstrap_alpha_vs_shuffled
+sys.path.insert(0, str(HERE.parents[2] / "lib"))
+from wave2a.sp_runner import run_experiment
+from wave2a.statefulpuzzle import StatefulPuzzleConfig
+from wave2a.metrics import spectral_slope, dfa_exponent, bootstrap_alpha_vs_shuffled
 
 RHO, D = 0.20, 1
 
