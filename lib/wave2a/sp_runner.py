@@ -8,7 +8,7 @@ from typing import Any
 
 
 from .azure_client import build_client, chat
-from .external_harness import require_statefulpuzzle_harness
+from .statefulpuzzle import require_statefulpuzzle_harness
 from .pipeline import analyze_trajectory
 from .statefulpuzzle import (
     StatefulPuzzleConfig, StatefulPuzzleSOC,

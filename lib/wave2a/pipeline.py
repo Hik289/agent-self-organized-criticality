@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from .external_harness import anchor3_helpers
+from .statefulpuzzle import anchor3_helpers
 from .metrics import sigma_series_from_z, detect_avalanches
 
 TAU_F = 0.5

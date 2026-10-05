@@ -32,9 +32,6 @@ dependencies = [
   "matplotlib>=3.7",
 ]
 
-[project.scripts]
-agentsoc-analyze = "agentsoc.cli:main"
-
 [project.urls]
 Paper = "https://arxiv.org/abs/2609.17419"
 Homepage = "https://github.com/Hik289/agent-self-organized-criticality"
@@ -42,4 +39,4 @@ Repository = "https://github.com/Hik289/agent-self-organized-criticality"
 
 [tool.setuptools.packages.find]
 where = ["lib"]
-include = ["wave2a*", "wave2b*", "wave2c*", "agentsoc*"]
+include = ["wave2a*", "wave2b*", "wave2c*"]
